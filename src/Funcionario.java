@@ -44,20 +44,25 @@ public class Funcionario implements IFuncionario {
         this.cargo = cargo;
     }
 
-    // Método para promover um funcionário - NÃO FINALIZADO
+    // Método para promover um funcionário (Professor ou Diretor)
+    @Override
     public void promover() {
-        CargoFuncionario[] cargos = CargoFuncionario.values();
-
-        for (int i = 0; i < cargos.length - 1; i++) {
-            if (cargos[i] == cargo) {
-                cargo = cargos[i + 1];
-                System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
-                return;
-            }
-        }
-
         try {
-            throw new IllegalArgumentException("Cargo não encontrado para o funcionário " + nome + ".");
+            switch (cargo) {
+                case INICIANTE:
+                    cargo = CargoFuncionario.EXPERIENTE;
+                    System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
+                    break;
+                case EXPERIENTE:
+                    cargo = CargoFuncionario.AVANÇADO;
+                    System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
+                    break;
+                case AVANÇADO:
+                    System.out.println("O funcionário " + nome + " já alcançou o cargo máximo.");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Cargo não encontrado para o funcionário " + nome + ".");
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
