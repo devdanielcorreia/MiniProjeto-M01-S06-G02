@@ -57,7 +57,7 @@ public class Funcionario implements IFuncionario {
         }
 
         try {
-            throw new IllegalArgumentException("Cargo não encontrado para o funcionário " + nome);
+            throw new IllegalArgumentException("Cargo não encontrado para o funcionário " + nome + ".");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
