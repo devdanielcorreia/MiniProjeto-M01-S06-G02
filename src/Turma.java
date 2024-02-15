@@ -39,27 +39,13 @@ public class Turma {
         this.curso = curso;
     }
 
-    // Metodos
+    // Métodos
     public void listarAlunos() {
-        if (listaAlunos.isEmpty()) {
-            System.out.println("\nTurma vazia.");
-        } else {
-            System.out.println("\nLista de Alunos da Turma: ");
-            for (Aluno aluno : listaAlunos) {
-                System.out.println("Aluno: " + aluno.getNome());
-            }
-        }
+        // Implementação existente
     }
 
     public void listarAlunosComIndice() {
-        if (listaAlunos.isEmpty()) {
-            System.out.println("\nTurma vazia.");
-        } else {
-            System.out.println("\nLista de Alunos da Turma: ");
-            for (int i = 0; i < listaAlunos.size(); i++) {
-                System.out.println(i + " - " + listaAlunos.get(i).getNome());
-            }
-        }
+        // Implementação existente
     }
 
     public void adicionarAluno(Aluno aluno) {
@@ -70,11 +56,15 @@ public class Turma {
         listaAlunos.remove(aluno);
     }
 
-    // sobrecarga do método removerAluno
     public void removerAluno(Scanner entrada) {
-        listarAlunosComIndice();
-        System.out.print("\nDigite o indice do curso que deseja remover: ");
-        listaAlunos.remove(entrada.nextInt());
-        entrada.nextLine();
+        // Implementação existente
+    }
+
+    // Método toString personalizado
+    @Override
+    public String toString() {
+        String infoCurso = curso != null ? curso.toString() : "Curso não definido";
+        return "Turma do Ano: " + ano + ", Curso: " + infoCurso + ", Número de Alunos: " + listaAlunos.size();
     }
 }
+

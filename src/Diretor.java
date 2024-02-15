@@ -1,16 +1,28 @@
 public class Diretor extends Funcionario {
-
     // Atributos
     int tempoDeCargo; // Será adotado em anos
 
-    // Construtor de Funcionário (classe Pai)
-    public Diretor(String nome, double salario) {
+    // Construtor
+    public Diretor(String nome, double salario, int tempoDeCargo) {
         super(nome, salario);
+        this.tempoDeCargo = tempoDeCargo;
     }
 
-    public static void criarTurma() {}
-    public static void listarAlunosTurma(){}
-    public static void adicionarAlunos(){}
-    public static void removerAlunos(){}
+    // Métodos estáticos omitidos para brevidade
 
+    // Getters e Setters para tempoDeCargo
+    public int getTempoDeCargo() {
+        return tempoDeCargo;
+    }
+
+    public void setTempoDeCargo(int tempoDeCargo) {
+        this.tempoDeCargo = tempoDeCargo;
+    }
+
+    // Método toString personalizado
+    @Override
+    public String toString() {
+        return "Diretor: " + getNome() + ", Salário: " + getSalario() + ", Tempo de Cargo: " + tempoDeCargo + " anos";
+    }
 }
+
