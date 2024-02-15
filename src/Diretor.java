@@ -3,8 +3,8 @@ public class Diretor extends Funcionario {
     int tempoDeCargo; // Será adotado em anos
 
     // Construtor
-    public Diretor(String nome, double salario, int tempoDeCargo) {
-        super(nome, salario);
+    public Diretor(String nome, double salario, CargoFuncionario cargo, int tempoDeCargo) {
+        super(nome, salario, cargo);
         this.tempoDeCargo = tempoDeCargo;
     }
 
@@ -22,7 +22,8 @@ public class Diretor extends Funcionario {
     // Método toString personalizado
     @Override
     public String toString() {
-        return "Diretor: " + getNome() + ", Salário: " + getSalario() + ", Tempo de Cargo: " + tempoDeCargo + " anos";
+        return "Diretor: " + getNome() + ", Salário: " + getSalario() + ", Tempo de Cargo: " + tempoDeCargo + " anos.";
     }
+
 }
 
