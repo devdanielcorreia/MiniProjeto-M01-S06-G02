@@ -25,4 +25,11 @@ public class Curso {
     public void setProfessor(Professor professor) {
         this.professor = professor;
     }
+
+    // Método toString personalizado
+    @Override
+    public String toString() {
+        return "Curso: " + nome + ", Professor: " + (professor != null ? professor.getNome() : "Nenhum");
+    }
 }
+

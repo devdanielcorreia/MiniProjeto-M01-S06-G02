@@ -36,6 +36,20 @@ public class Aluno {
     }
 
     // Metodos
+
+    @Override
+    public String toString() {
+        String result = "Aluno: " + nome + "\nIdade: " + idade + "\nCursos: ";
+        if (listaCursos.isEmpty()) {
+            result += "Nenhum curso cadastrado.";
+        } else {
+            for (Curso curso : listaCursos) {
+                result += "\n- " + curso.getNome();
+            }
+        }
+        return result;
+    }
+
     public void listarCursos() {
         if (listaCursos.isEmpty()) {
             System.out.println("\nNenhum curso encontrado.");

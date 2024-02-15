@@ -12,7 +12,6 @@ public class Professor {
     }
 
     // Getters e Setters
-
     public String getNome() {
         return nome;
     }
@@ -36,4 +35,11 @@ public class Professor {
     public void setTempoTrabalho(int tempoTrabalho) {
         this.tempoTrabalho = tempoTrabalho;
     }
+
+    // Método toString personalizado
+    @Override
+    public String toString() {
+        return "Professor: " + nome + ", Idade: " + idade + ", Tempo de Trabalho: " + tempoTrabalho + " anos";
+    }
 }
+
