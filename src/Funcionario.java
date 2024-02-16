@@ -54,10 +54,10 @@ public class Funcionario implements IFuncionario {
                     System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
                     break;
                 case EXPERIENTE:
-                    cargo = CargoFuncionario.AVANÇADO;
+                    cargo = CargoFuncionario.AVANCADO;
                     System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
                     break;
-                case AVANÇADO:
+                case AVANCADO:
                     System.out.println("O funcionário " + nome + " já alcançou o cargo máximo.");
                     break;
                 default:
