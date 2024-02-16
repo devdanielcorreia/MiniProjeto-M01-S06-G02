@@ -37,4 +37,13 @@ public class DadosProfessores {
             System.out.println("Não foi possível localizar um professor com a ID " + idProfessor + " em nosso sistema.");
         }
     }
+    @Override
+    public String toString() {
+        String result = "DadosProfessores{\n";
+        for (Professor professor : listaProfessores) {
+            result += professor.toString() + "\n";
+        }
+        result += "}";
+        return result;
+    }
 }
