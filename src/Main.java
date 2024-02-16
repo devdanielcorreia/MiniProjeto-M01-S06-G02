@@ -11,8 +11,8 @@ public class Main {
         List<Curso> listaCursos = new ArrayList<>();
         List<Aluno> listaAlunos = new ArrayList<>();
 
-        Professor professor1 = new Professor("Gabriel", 38, 4);
-        Professor professor2 = new Professor("André", 33, 6);
+        Professor professor1 = new Professor("Gabriel", 2500, CargoFuncionario.INICIANTE, 32, 5);
+        Professor professor2 = new Professor("André", 3000, CargoFuncionario.AVANCADO, 35, 7);
 
         Curso curso1 = new Curso("Java", professor1);
         Curso curso2 = new Curso("Python", professor2);

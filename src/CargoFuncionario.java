@@ -1,7 +1,7 @@
 public enum CargoFuncionario {
     INICIANTE(1, "Primeiro Cargo"),
     EXPERIENTE(2, "Segundo Cargo" ),
-    AVANÇADO(3, "Terceiro Cargo");
+    AVANCADO(3, "Terceiro Cargo");
 
     private final int indiceCargo;
     private final String numCargo;

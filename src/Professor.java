@@ -1,25 +1,16 @@
-public class Professor {
+public class Professor extends Funcionario {
     // Atributos
-    private String nome;
     private int idade;
     private int tempoTrabalho;
 
     // Construtor
-    public Professor(String nome, int idade, int tempoTrabalho) {
-        this.nome = nome;
+    public Professor(String nome, double salario, CargoFuncionario cargo, int idade, int tempoTrabalho) {
+        super(nome, salario, cargo);
         this.idade = idade;
         this.tempoTrabalho = tempoTrabalho;
     }
 
     // Getters e Setters
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public int getIdade() {
         return idade;
     }
@@ -39,7 +30,7 @@ public class Professor {
     // Método toString personalizado
     @Override
     public String toString() {
-        return "Professor: " + nome + ", Idade: " + idade + ", Tempo de Trabalho: " + tempoTrabalho + " anos";
+        return "Professor: " + getNome() + ", Idade: " + idade + ", Tempo de Trabalho: " + tempoTrabalho + " anos";
     }
 }
 
