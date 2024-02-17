@@ -37,11 +37,10 @@ public class DadosAlunos {
     }
     @Override
     public String toString() {
-        String result = "DadosAlunos{\n";
+        String result = "DadosAlunos:\n";
         for (Aluno aluno : listaAlunos) { // Correção aplicada aqui
-            result += aluno.toString() + "\n";
+            result += aluno.toString();
         }
-        result += "}";
         return result;
     }
 }

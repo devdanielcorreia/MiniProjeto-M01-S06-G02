@@ -39,11 +39,10 @@ public class DadosProfessores {
     }
     @Override
     public String toString() {
-        String result = "DadosProfessores{\n";
+        String result = "DadosProfessores:\n";
         for (Professor professor : listaProfessores) {
-            result += professor.toString() + "\n";
+            result += professor.toString();
         }
-        result += "}";
         return result;
     }
 }
