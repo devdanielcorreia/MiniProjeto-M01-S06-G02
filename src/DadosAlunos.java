@@ -29,7 +29,6 @@ public class DadosAlunos {
             System.err.println("Erro de entrada. Por favor, insira um número para a idade.");
             scn.nextLine();
         } finally {
-            // Aqui pode-se fechar o Scanner se não for mais usado, mas como provavelmente será usado novamente, não será fechado.
         }
     }
 
@@ -37,7 +36,7 @@ public class DadosAlunos {
         try {
             listaAlunos.remove(indexAluno);
         } catch (IndexOutOfBoundsException e) {
-            System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
+            System.err.println("O índice ndice fornecido está fora do intervalo. Não foi possível remover o aluno.");
         }
     }
 
