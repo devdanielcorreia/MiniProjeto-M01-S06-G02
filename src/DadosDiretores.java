@@ -1,45 +1,16 @@
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class DadosDiretores {
     Scanner scn = new Scanner(System.in);
-    ArrayList<Diretor> listaDiretores = new ArrayList<>();
+    List<Diretor> listaDiretores = new ArrayList<>();
 
     // MÉTODOS DA CLASSE
     public void adicionarDiretor() {
         try {
-            // RECEBENDO INFORMAÇÕES DA NOVA PESSOA
-            System.out.print("Nome do novo diretor: ");
-            String nomeNovoDiretor = scn.nextLine();
-
-            System.out.print("Salário do novo diretor: ");
-            double salarioNovoDiretor = scn.nextDouble();
-            scn.nextLine(); // consome quebra de linha do último input de double
-
-            System.out.println("Escolha o cargo do novo diretor:");
-            for (CargoFuncionario cargo : CargoFuncionario.values()) {
-                System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNumCargo());
-            }
-            int escolhaCargo = scn.nextInt();
-            scn.nextLine(); // consome quebra de linha do último input de int
-
-            CargoFuncionario cargoNovoDiretor;
-
-            if (escolhaCargo >= 1 && escolhaCargo <= CargoFuncionario.values().length) {
-                cargoNovoDiretor = CargoFuncionario.values()[escolhaCargo - 1];
-            } else {
-                System.out.println("Opção inválida. O cargo foi definido como null.");
-                cargoNovoDiretor = null;
-            }
-
-            System.out.print("Tempo de trabalho do novo diretor: ");
-            int tempoTrabalhoNovoDiretor = scn.nextInt();
-            scn.nextLine(); // consome quebra de linha do último input de int
+            String nomeNovoDiretor = receberNome();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaDiretores.add(new Diretor(nomeNovoDiretor, salarioNovoDiretor, cargoNovoDiretor, tempoTrabalhoNovoDiretor));
+            listaDiretores.add(new Diretor(nomeNovoDiretor, receberSalario(), receberCargo(), receberTempoTrabalho()));
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoDiretor.toUpperCase() + " foi adicionado à lista* \n");
@@ -51,6 +22,46 @@ public class DadosDiretores {
         } catch (Exception e) {
             System.err.println("Ocorreu um erro ao adicionar o diretor: " + e.getMessage());
         }
+    }
+
+    private String receberNome() {
+        System.out.print("Nome do novo diretor: ");
+        return scn.nextLine();
+    }
+
+    private int receberSalario() {
+        System.out.print("Salário do novo diretor: ");
+        int salarioNovoDiretor = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha do último input de int
+        return salarioNovoDiretor;
+    }
+
+    private int receberTempoTrabalho() {
+        System.out.print("Tempo de trabalho do novo diretor: ");
+        int tempoTrabalhoNovoDiretor = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha do último input de int
+
+        return tempoTrabalhoNovoDiretor;
+    }
+
+    private CargoFuncionario receberCargo() {
+        System.out.println("Escolha o cargo do novo diretor:");
+        for (CargoFuncionario cargo : CargoFuncionario.values()) {
+            System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNumCargo());
+        }
+        int escolhaCargo = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha do último input de int
+
+        CargoFuncionario cargoNovoDiretor;
+
+        if (escolhaCargo >= 1 && escolhaCargo <= CargoFuncionario.values().length) {
+            cargoNovoDiretor = CargoFuncionario.values()[escolhaCargo - 1];
+        } else {
+            System.out.println("Opção inválida. O cargo foi definido como null.");
+            cargoNovoDiretor = null;
+        }
+
+        return cargoNovoDiretor;
     }
 
     public void removerDiretor(int indexDiretor) {
