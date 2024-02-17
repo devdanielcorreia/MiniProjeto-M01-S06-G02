@@ -35,4 +35,12 @@ public class DadosAlunos {
             System.out.println("Não foi possível localizar um aluno com a ID " + idAluno + " em nosso sistema.");
         }
     }
+    @Override
+    public String toString() {
+        String result = "DadosAlunos:\n";
+        for (Aluno aluno : listaAlunos) { // Correção aplicada aqui
+            result += aluno.toString();
+        }
+        return result;
+    }
 }

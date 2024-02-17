@@ -54,4 +54,12 @@ public class DadosDiretores {
             System.out.println("Não foi possível localizar um diretor com a ID " + idDiretor + " em nosso sistema.");
         }
     }
+    @Override
+    public String toString() {
+        String result = "DadosDiretores:\n";
+        for (Diretor diretor : listaDiretores) {
+            result += diretor.toString();
+        }
+        return result;
+    }
 }

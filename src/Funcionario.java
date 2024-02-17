@@ -67,5 +67,9 @@ public class Funcionario implements IFuncionario {
             System.out.println(e.getMessage());
         }
     }
+    @Override
+    public String toString() {
+        return "Funcionario{" +  "nome='" + nome + '\'' + ", salario=" + salario + ", cargo=" + cargo + '}';
+    }
 }
 

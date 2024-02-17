@@ -30,7 +30,7 @@ public class Professor extends Funcionario {
     // Método toString personalizado
     @Override
     public String toString() {
-        return "Professor: " + getNome() + ", Idade: " + idade + ", Tempo de Trabalho: " + tempoTrabalho + " anos";
+        return super.toString() + "Funcionario{" +  "nome='" + getNome() + '\'' + ", salario=" + getSalario() + ", cargo=" + getCargo() + '}';
     }
 }
 
