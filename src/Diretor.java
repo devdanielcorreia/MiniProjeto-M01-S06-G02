@@ -44,6 +44,6 @@ public class Diretor extends Funcionario {
     // Método toString personalizado
     @Override
     public String toString() {
-        return "Diretor: " + getNome() + ", Salário: " + getSalario() + ", Tempo de Cargo: " + tempoDeCargo + " anos.";
+        return super.toString() + "Funcionario{" +  "nome='" + getNome() + '\'' + ", salario=" + getSalario() + ", cargo=" + getCargo() + '}';
     }
 }
