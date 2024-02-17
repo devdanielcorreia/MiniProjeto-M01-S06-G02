@@ -17,7 +17,7 @@ public class DadosAlunos {
         ArrayList<Curso> listaCursosNovoAluno = new ArrayList<>();
 
         //INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-        listaAlunos.add(new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno));
+        listaAlunos.add(new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, StatusMatricula.ATIVO));
 
         //FEEDBACK AO USUÁRIO
         System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado à lista* \n");
