@@ -1,27 +1,19 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class DadosProfessores {
     Scanner scn = new Scanner(System.in);
-    ArrayList<Professor> listaProfessores = new ArrayList<>();
+    List<Professor> listaProfessores = new ArrayList<>();
 
     // MÉTODOS DA CLASSE
     public void adicionarProfessor() {
         try {
-            // RECEBENDO INFORMAÇÕES DA NOVA PESSOA
-            System.out.print("Nome do novo professor: ");
-            String nomeNovoProfessor = scn.nextLine();
-
-            System.out.print("Idade do novo professor: ");
-            int idadeNovoProfessor = scn.nextInt();
-
-            System.out.print("Tempo de trabalho do novo professor: ");
-            int tempoTrabalhoNovoProfessor = scn.nextInt();
-            scn.nextLine(); // consome quebra de linha do último input de int
+            String nomeNovoProfessor = receberNome();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaProfessores.add(new Professor(nomeNovoProfessor, 3000, CargoFuncionario.INICIANTE, idadeNovoProfessor, tempoTrabalhoNovoProfessor));
+            listaProfessores.add(new Professor(nomeNovoProfessor, 3000, CargoFuncionario.INICIANTE, receberIdade(), receberTempoTrabalho()));
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoProfessor.toUpperCase() + " foi adicionado à lista* \n");
@@ -31,6 +23,26 @@ public class DadosProfessores {
         } catch (Exception e) {
             System.err.println("Ocorreu um erro inesperado: " + e.getMessage());
         }
+    }
+
+    private String receberNome() {
+        System.out.print("Nome do novo professor: ");
+        return scn.nextLine();
+    }
+
+    private int receberIdade() {
+        System.out.print("Idade do novo professor: ");
+        int idadeNovoProfessor = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha do último input de int
+        return idadeNovoProfessor;
+    }
+
+    private int receberTempoTrabalho() {
+        System.out.print("Tempo de trabalho do novo professor: ");
+        int tempoTrabalhoNovoProfessor = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha do último input de int
+
+        return tempoTrabalhoNovoProfessor;
     }
 
     public void removerProfessor(int indexProfessor) {
