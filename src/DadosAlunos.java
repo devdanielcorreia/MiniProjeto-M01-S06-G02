@@ -61,5 +61,13 @@ public class DadosAlunos {
         }
         return result.toString();
     }
+    @Override
+    public String toString() {
+        String result = "DadosAlunos:\n";
+        for (Aluno aluno : listaAlunos) { // Correção aplicada aqui
+            result += aluno.toString();
+        }
+        return result;
+    }
 }
 
