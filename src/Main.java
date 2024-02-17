@@ -17,8 +17,8 @@ public class Main {
         Curso curso1 = new Curso("Java", professor1);
         Curso curso2 = new Curso("Python", professor2);
 
-        Aluno aluno1 = new Aluno("Rafael", 20, listaCursos);
-        Aluno aluno2 = new Aluno("Miguel", 24, listaCursos);
+        Aluno aluno1 = new Aluno("Rafael", 20, listaCursos, StatusMatricula.ATIVO);
+        Aluno aluno2 = new Aluno("Miguel", 24, listaCursos, StatusMatricula.ATIVO);
 
         listaAlunos.add(aluno1);
         listaAlunos.add(aluno2);
@@ -37,5 +37,6 @@ public class Main {
 
         turma1.listarAlunos();
         turma1.listarAlunosComIndice();
+
     }
 }

@@ -46,8 +46,4 @@ public class Diretor extends Funcionario {
     public String toString() {
         return super.toString() + "Funcionario{" +  "nome='" + getNome() + '\'' + ", salario=" + getSalario() + ", cargo=" + getCargo() + '}';
     }
-
 }
-
-// TURMA: listar alunos, adicionar aluno, remover aluno
-// DIRETOR: Criar uma turma, listar alunos turma, adicionar alunos turma, remover alunos turma

@@ -19,7 +19,7 @@ public class DadosProfessores {
         scn.nextLine(); // consome quebra de linha do último input de int
 
         //INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-        listaProfessores.add(new Professor(nomeNovoProfessor, idadeNovoProfessor, tempoTrabalhoNovoProfessor));
+        listaProfessores.add(new Professor(nomeNovoProfessor, 3000, CargoFuncionario.INICIANTE, idadeNovoProfessor, tempoTrabalhoNovoProfessor));
 
         //FEEDBACK AO USUÁRIO
         System.out.println("*" + nomeNovoProfessor.toUpperCase() + " foi adicionado à lista* \n");
