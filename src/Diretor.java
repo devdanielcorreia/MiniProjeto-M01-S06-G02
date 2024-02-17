@@ -1,6 +1,5 @@
 import java.util.List;
 
-// Classe diretor herdando de funcionário
 public class Diretor extends Funcionario {
     // Atributos
     int tempoDeCargo; // Será adotado em anos

@@ -6,12 +6,14 @@ public class Aluno {
     private String nome;
     private int idade;
     private List<Curso> listaCursos;
+    private StatusMatricula statusMatricula;
 
     // Construtor
-    public Aluno(String nome, int idade, List<Curso> listaCursos) {
+    public Aluno(String nome, int idade, List<Curso> listaCursos, StatusMatricula statusMatricula) {
         this.nome = nome;
         this.idade = idade;
         this.listaCursos = listaCursos;
+        this.statusMatricula = statusMatricula;
     }
 
     // Getters e Setters
@@ -35,11 +37,18 @@ public class Aluno {
         return listaCursos;
     }
 
-    // Metodos
+    public StatusMatricula getStatusMatricula() {
+        return statusMatricula;
+    }
 
+    public void setStatusMatricula(StatusMatricula statusMatricula) {
+        this.statusMatricula = statusMatricula;
+    }
+
+    // Metodos
     @Override
     public String toString() {
-        String result = "Aluno: " + nome + "\nIdade: " + idade + "\nCursos: ";
+        String result = "Aluno: " + nome + "\nIdade: " + idade + "\nStatus de Matrícula: " + statusMatricula + "\nCursos: ";
         if (listaCursos.isEmpty()) {
             result += "Nenhum curso cadastrado.";
         } else {
