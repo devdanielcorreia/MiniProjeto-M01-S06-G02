@@ -24,15 +24,23 @@ public class DadosAlunos {
     }
 
     public void removerAluno(int indexAluno) {
-        listaAlunos.remove(indexAluno);
+        try {
+            listaAlunos.remove(indexAluno);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
+        }
     }
 
     public void buscarAluno(int idAluno) {
-        if (idAluno >= 0 && idAluno < listaAlunos.size()) {
-            System.out.println("Resultado da busca para o ID " + idAluno + ":");
-            System.out.println(listaAlunos.get(idAluno));
-        } else {
-            System.out.println("Não foi possível localizar um aluno com a ID " + idAluno + " em nosso sistema.");
+        try {
+            if (idAluno >= 0 && idAluno < listaAlunos.size()) {
+                System.out.println("Resultado da busca para o ID " + idAluno + ":");
+                System.out.println(listaAlunos.get(idAluno));
+            } else {
+                throw new IllegalArgumentException("ID fornecido é inválido.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Não foi possível localizar um aluno com a ID " + idAluno + " em nosso sistema.");
         }
     }
 }
