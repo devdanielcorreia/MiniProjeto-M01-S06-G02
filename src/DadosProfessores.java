@@ -99,11 +99,11 @@ public class DadosProfessores {
     }
     @Override
     public String toString() {
-        String result = "DadosProfessores:\n";
+        StringBuilder result = new StringBuilder("DadosProfessores:\n");
         for (Professor professor : listaProfessores) {
-            result += professor.toString();
+            result.append(professor.toString()).append("\n");
         }
-        return result;
+        return result.toString();
     }
 }
 

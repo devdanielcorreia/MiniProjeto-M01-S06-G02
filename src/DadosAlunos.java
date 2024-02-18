@@ -98,7 +98,6 @@ public class DadosAlunos {
             // O método toString do aluno é chamado automaticamente
             result.append(aluno.toString()).append("\n");
         }
-
         // Converte o StringBuilder para String e retorna o resultado
         // Isso inclui a representação de todos os alunos na lista, cada um em uma nova linha
         return result.toString();
