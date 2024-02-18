@@ -86,10 +86,10 @@ public class DadosDiretores {
     }
     @Override
     public String toString() {
-        String result = "DadosDiretores:\n";
+        StringBuilder result = new StringBuilder("DadosDiretores:\n");
         for (Diretor diretor : listaDiretores) {
-            result += diretor.toString();
+            result.append(diretor.toString()).append("\n");
         }
-        return result;
+        return result.toString();
     }
 }
