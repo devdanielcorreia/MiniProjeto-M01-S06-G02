@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -95,9 +96,28 @@ public class Aluno {
 
     // sobrecarga do método removerCurso
     public void removerCurso(Scanner entrada) {
+        // Exibe a lista de cursos com índices para o usuário
         listarCursosComIndice();
-        System.out.print("\nDigite o indice do curso que deseja remover: ");
-        listaCursos.remove(entrada.nextInt());
-        entrada.nextLine();
+        System.out.print("\nDigite o índice do curso que deseja remover: ");
+        try {
+            // Tenta ler o índice do curso como um inteiro
+            int indice = entrada.nextInt();
+            // Verifica se o índice está dentro do intervalo válido da lista
+            if (indice >= 0 && indice < listaCursos.size()) {
+                // Remove o curso com o índice especificado
+                listaCursos.remove(indice);
+                System.out.println("Curso removido com sucesso.");
+            } else {
+                // Informa ao usuário que o índice é inválido
+                System.out.println("Índice inválido.");
+            }
+        } catch (InputMismatchException e) {
+            // Captura exceções caso o usuário não digite um inteiro
+            System.out.println("Por favor, insira um número inteiro válido.");
+        } finally {
+            // Sempre limpa o buffer do scanner para evitar erros na próxima leitura
+            entrada.nextLine();
+        }
     }
+
 }
