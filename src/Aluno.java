@@ -48,16 +48,20 @@ public class Aluno {
     // Metodos
     @Override
     public String toString() {
-        String result = "Aluno: " + nome + "\nIdade: " + idade + "\nStatus de Matrícula: " + statusMatricula + "\nCursos: ";
+        // Inicia um StringBuilder para construir a string de forma eficiente
+        StringBuilder result = new StringBuilder("Aluno: " + nome + "\nIdade: " + idade + "\nStatus de Matrícula: " + statusMatricula + "\nCursos: ");
+        // Verifica se a lista de cursos está vazia
         if (listaCursos.isEmpty()) {
-            result += "Nenhum curso cadastrado.";
+            // Adiciona uma mensagem indicando que nenhum curso está cadastrado
+            result.append("Nenhum curso cadastrado.");
         } else {
-            for (Curso curso : listaCursos) {
-                result += "\n- " + curso.getNome();
-            }
+            // Para cada curso na lista, adiciona o nome do curso ao resultado
+            listaCursos.forEach(curso -> result.append("\n- ").append(curso.getNome()));
         }
-        return result;
+        // Converte o StringBuilder para String e o retorna
+        return result.toString();
     }
+
 
     public void listarCursos() {
         if (listaCursos.isEmpty()) {
