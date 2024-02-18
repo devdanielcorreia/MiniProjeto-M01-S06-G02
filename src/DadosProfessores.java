@@ -13,7 +13,7 @@ public class DadosProfessores {
             String nomeNovoProfessor = receberNome();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaProfessores.add(new Professor(nomeNovoProfessor, 3000, CargoFuncionario.INICIANTE, receberIdade(), receberTempoTrabalho()));
+            listaProfessores.add(new Professor(nomeNovoProfessor, receberSalario(), receberCargo(), receberIdade(), receberTempoTrabalho()));
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoProfessor.toUpperCase() + " foi adicionado à lista* \n");
@@ -28,6 +28,38 @@ public class DadosProfessores {
     private String receberNome() {
         System.out.print("Nome do novo professor: ");
         return scn.nextLine();
+    }
+
+    private int receberSalario() {
+        System.out.println("Digite o salário do novo professor: ");
+        int salarioNovoProfessor = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha do último input de int
+        return salarioNovoProfessor;
+    }
+
+    private CargoFuncionario receberCargo() {
+        // Receber o Cargo Funcionario do professor por String
+        System.out.println("Cargo Funcionário do professor (INICIANTE, EXPERIENTE, AVANÇADO): ");
+        String cargoFuncionarioString = scn.nextLine();
+
+        // Loop em values CargoFuncionario
+        for (CargoFuncionario cargo : CargoFuncionario.values()) {
+            // Verificação se o que o usuário digitou existe em values()
+            if (cargo.name().equalsIgnoreCase(cargoFuncionarioString)) {
+                try {
+                    // Converter a string em um Enum CargoFuncionario utilizando o valueOf()
+                    return CargoFuncionario.valueOf(cargoFuncionarioString.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // Se ocorrer uma exceção, informar ao usuário e continuar o loop
+                    System.out.println("Cargo Funcionário inválido. Por favor, digite um cargo válido.");
+                    break;
+                }
+            }
+        }
+
+        // Se não encontrar correspondência, informar ao usuário que o cargo é inválido e retornar null
+        System.out.println("Cargo Funcionário inválido. Por favor, digite um cargo válido.");
+        return null;
     }
 
     private int receberIdade() {
