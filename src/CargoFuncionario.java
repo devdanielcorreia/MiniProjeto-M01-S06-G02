@@ -1,21 +1,15 @@
 public enum CargoFuncionario {
-    INICIANTE(1, "Primeiro Cargo"),
-    EXPERIENTE(2, "Segundo Cargo" ),
-    AVANCADO(3, "Terceiro Cargo");
+    INICIANTE(1),
+    EXPERIENTE(2),
+    AVANCADO(3);
 
     private final int indiceCargo;
-    private final String numCargo;
 
-    CargoFuncionario(int indiceCargo, String numCargo) {
+    CargoFuncionario(int indiceCargo) {
         this.indiceCargo = indiceCargo;
-        this.numCargo = numCargo;
     }
 
     public int getIndiceCargo() {
         return indiceCargo;
-    }
-
-    public String getNumCargo() {
-        return numCargo;
     }
 }

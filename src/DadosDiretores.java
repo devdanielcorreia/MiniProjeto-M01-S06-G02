@@ -47,7 +47,7 @@ public class DadosDiretores {
     private CargoFuncionario receberCargo() {
         System.out.println("Escolha o cargo do novo diretor:");
         for (CargoFuncionario cargo : CargoFuncionario.values()) {
-            System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNumCargo());
+            System.out.println(cargo.getIndiceCargo() + ". " + cargo.name());
         }
         int escolhaCargo = scn.nextInt();
         scn.nextLine(); // consome quebra de linha do último input de int
