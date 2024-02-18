@@ -1,27 +1,21 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DadosAlunos {
     Scanner scn = new Scanner(System.in);
-    ArrayList<Aluno> listaAlunos = new ArrayList<>();
+    List<Aluno> listaAlunos = new ArrayList<>();
 
     // MÉTODOS DA CLASSE
     public void adicionarAluno() {
         try {
-            // RECEBENDO INFORMAÇÕES DA NOVA PESSOA
-            System.out.print("Nome do novo aluno: ");
-            scn.nextLine();
-            String nomeNovoAluno = scn.nextLine();
+            String nomeNovoAluno = receberNome();
 
-            System.out.print("Idade do novo aluno: ");
-            int idadeNovoAluno = scn.nextInt();
-            scn.nextLine();
-
-            ArrayList<Curso> listaCursosNovoAluno = new ArrayList<>();
+            List<Curso> listaCursosNovoAluno = new ArrayList<>();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaAlunos.add(new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, StatusMatricula.ATIVO));
+            listaAlunos.add(new Aluno(nomeNovoAluno, receberIdade(), listaCursosNovoAluno, StatusMatricula.ATIVO));
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado à lista* \n");
@@ -30,6 +24,19 @@ public class DadosAlunos {
             scn.nextLine();
         } finally {
         }
+    }
+
+    private String receberNome() {
+        System.out.print("Nome do novo aluno: ");
+        return scn.nextLine();
+    }
+
+    private int receberIdade(){
+        System.out.print("Idade do novo aluno: ");
+        int idadeNovoAluno = scn.nextInt();
+        scn.nextLine(); // consome quebra de linha
+
+        return idadeNovoAluno;
     }
 
     public void removerAluno(int indexAluno) {
@@ -60,14 +67,6 @@ public class DadosAlunos {
             result.append(aluno.toString());
         }
         return result.toString();
-    }
-    @Override
-    public String toString() {
-        String result = "DadosAlunos:\n";
-        for (Aluno aluno : listaAlunos) { // Correção aplicada aqui
-            result += aluno.toString();
-        }
-        return result;
     }
 }
 
