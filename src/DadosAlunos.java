@@ -11,11 +11,13 @@ public class DadosAlunos {
     public void adicionarAluno() {
         try {
             String nomeNovoAluno = receberNome();
+            int idadeNovoAluno = receberIdade();
+            StatusMatricula statusMatriculaNovoAluno = receberStatusMatricula();
 
             List<Curso> listaCursosNovoAluno = new ArrayList<>();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaAlunos.add(new Aluno(nomeNovoAluno, receberIdade(), listaCursosNovoAluno, StatusMatricula.ATIVO));
+            listaAlunos.add(new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, statusMatriculaNovoAluno));
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado à lista* \n");
@@ -37,6 +39,31 @@ public class DadosAlunos {
         scn.nextLine(); // consome quebra de linha
 
         return idadeNovoAluno;
+    }
+
+    private StatusMatricula receberStatusMatricula() {
+        // Receber o Status da Matricula do aluno por String
+        System.out.println("Status da matrícula do aluno (ATIVO, TRANCADO, FORMADO): ");
+        String statusMatriculaString = scn.nextLine();
+
+        // Loop em values StatusMatricula
+        for (StatusMatricula status : StatusMatricula.values()) {
+            // Verificação se o que o usuário digitou existe em values()
+            if (status.name().equalsIgnoreCase(statusMatriculaString)) {
+                try {
+                    // Converter a string em um Enum CargoFuncionario utilizando o valueOf()
+                    return StatusMatricula.valueOf(statusMatriculaString.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // Se ocorrer uma exceção, informar ao usuário e continuar o loop
+                    System.out.println("Status matrícula inválido. Por favor, digite um status válido.");
+                    break;
+                }
+            }
+        }
+
+        // Se não encontrar correspondência, informar ao usuário que o status é inválido e retornar null
+        System.out.println("Status matrícula inválido. Por favor, digite um status válido.");
+        return null;
     }
 
     public void removerAluno(int indexAluno) {

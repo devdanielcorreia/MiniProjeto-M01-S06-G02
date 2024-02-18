@@ -48,25 +48,30 @@ public class Funcionario implements IFuncionario {
     @Override
     public void promover() {
         try {
+            if (cargo == null) {
+                throw new Exception("Cargo não pode ser nulo.");
+            }
+
             switch (cargo) {
                 case INICIANTE:
                     cargo = CargoFuncionario.EXPERIENTE;
-                    System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
+                    System.out.println("O funcionário " + nome + " foi promovido para " + cargo.name() + ".");
                     break;
                 case EXPERIENTE:
                     cargo = CargoFuncionario.AVANCADO;
-                    System.out.println("O funcionário " + nome + " foi promovido para " + cargo.getNumCargo());
+                    System.out.println("O funcionário " + nome + " foi promovido para " + cargo.name() + ".");
                     break;
                 case AVANCADO:
                     System.out.println("O funcionário " + nome + " já alcançou o cargo máximo.");
                     break;
                 default:
-                    throw new IllegalArgumentException("Cargo não encontrado para o funcionário " + nome + ".");
+                    throw new Exception("Cargo não encontrado para o funcionário " + nome + ".");
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
     @Override
     public String toString() {
         return "Funcionario{" +  "nome='" + nome + '\'' + ", salario=" + salario + ", cargo=" + cargo + '}';
