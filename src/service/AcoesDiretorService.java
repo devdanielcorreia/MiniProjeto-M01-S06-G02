@@ -9,6 +9,7 @@ import model.*;
 import java.util.List;
 import java.util.Scanner;
 
+import static utils.ConsoleUtils.listarAlunos;
 import static utils.ConsoleUtils.menuPrincipalAcoesDiretor;
 import static utils.ValidaEntradaUtils.*;
 
@@ -30,7 +31,7 @@ public class AcoesDiretorService {
                 case 0:
                     return;
                 case 1:
-                    listarAlunos();
+                    listarAlunos(dadosAlunos);
                     break;
                 case 2:
                     adicionarAluno();
@@ -71,24 +72,12 @@ public class AcoesDiretorService {
         }
     }
 
-    private void listarAlunos() {
-        List<Aluno> listaAlunos = dadosAlunos.getListaAlunos();
-        if (listaAlunos.isEmpty()) {
-            System.out.println("Não há nenhum aluno cadastrado no sistema.");
-        } else {
-            System.out.println("LISTA DE ALUNOS.");
-            for (int i = 0; i < listaAlunos.size(); i++) {
-                System.out.println("ID " + (i + 1) + " - " + listaAlunos.get(i).toString());
-            }
-        }
-    }
-
     private void adicionarAluno() {
         dadosAlunos.adicionarAluno();
     }
 
     private void removerAluno(Scanner scanner) {
-        listarAlunos();
+        listarAlunos(dadosAlunos);
         if (!dadosAlunos.getListaAlunos().isEmpty()) {
             System.out.println("\nDigite o ID do aluno a ser removido.");
             dadosAlunos.removerAluno(validaInputInteger(scanner));
@@ -158,13 +147,13 @@ public class AcoesDiretorService {
         if (!dadosTurmas.getlistaTurmas().isEmpty()) {
             System.out.println("\nDigite o ID da Turma que o Aluno será matriculado.");
             Turma turma = dadosTurmas.getlistaTurmas().get(validaInputUsuarioRangeOpcoes(scanner, 1, dadosTurmas.getlistaTurmas().size()) - 1);
-            listarAlunos();
+            listarAlunos(dadosAlunos);
             if (!dadosAlunos.getListaAlunos().isEmpty()) {
                 System.out.println("\nDigite o ID do Aluno que será matriculado na Turma: " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
                 Aluno alunoMatricular = dadosAlunos.getListaAlunos().get(validaInputUsuarioRangeOpcoes(scanner, 1, dadosAlunos.getListaAlunos().size()) - 1);
                 turma.adicionarAluno(alunoMatricular);
                 dadosTurmas.atualizarDados(turma);
-                System.out.println("\nAluno ." + alunoMatricular.getNome() + " matriculado na Turma " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
+                System.out.println("\nAluno " + alunoMatricular.getNome() + " matriculado na Turma " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
             }
         }
     }
@@ -180,7 +169,7 @@ public class AcoesDiretorService {
                 Aluno alunoRemover = turma.getListaAlunos().get(validaInputUsuarioRangeOpcoes(scanner, 1, turma.getListaAlunos().size()) - 1);
                 turma.removerAluno(alunoRemover);
                 dadosTurmas.atualizarDados(turma);
-                System.out.println("\nAluno ." + alunoRemover.getNome() + " removido da Turma " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
+                System.out.println("\nAluno " + alunoRemover.getNome() + " removido da Turma " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
             } else {
                 System.out.println("Turma selecionada não tem nenhum aluno matrículado.");
             }
@@ -188,7 +177,7 @@ public class AcoesDiretorService {
     }
 
     private void listarTodosUsuarios() {
-        listarAlunos();
+        listarAlunos(dadosAlunos);
         listarProfessores();
     }
 

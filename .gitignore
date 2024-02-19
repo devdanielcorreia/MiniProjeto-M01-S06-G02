@@ -3,6 +3,7 @@ out/
 !*/src/main/*/out/
 !*/src/test/*/out/
 /.idea/
-/dados_alunos.csv
-/dados_diretores.csv
-/dados_professores.csv
+/dados_alunos.bin
+/dados_diretores.bin
+/dados_professores.bin
+/dados_turmas.bin

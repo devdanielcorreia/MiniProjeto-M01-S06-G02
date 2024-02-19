@@ -1,5 +1,10 @@
 package utils;
 
+import database.DadosAlunos;
+import model.Aluno;
+
+import java.util.List;
+
 public class ConsoleUtils {
 
     public static void printLogoFMT() {
@@ -94,7 +99,25 @@ public class ConsoleUtils {
         System.out.println("  0 - Encerrar sessão.");
     }
 
+    public static void menuPrincipalAcoesProfessor(String nomeDiretor){
+        System.out.println("\nBem-vindo: " + nomeDiretor + "!. Selecione uma das opções abaixo:");
+        System.out.println("  1 - Listar Alunos de uma Turma;");
+        System.out.println("  2 - Adicionar Aluno a uma Turma;");
+        System.out.println("  3 - Remover Aluno de uma Turma;");
+        System.out.println("  0 - Encerrar sessão.");
+    }
 
+    public static void listarAlunos(DadosAlunos dadosAlunos) {
+        List<Aluno> listaAlunos = dadosAlunos.getListaAlunos();
+        if (listaAlunos.isEmpty()) {
+            System.out.println("Não há nenhum aluno cadastrado no sistema.");
+        } else {
+            System.out.println("LISTA DE ALUNOS.");
+            for (int i = 0; i < listaAlunos.size(); i++) {
+                System.out.println("ID " + (i + 1) + " - " + listaAlunos.get(i).toString());
+            }
+        }
+    }
 
 
 }
