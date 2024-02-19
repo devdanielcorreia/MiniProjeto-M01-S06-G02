@@ -15,7 +15,7 @@ import static utils.ValidaEntradaUtils.*;
 public class DadosAlunos {
     Scanner scn = new Scanner(System.in);
 
-    private final String arquivoDados = "dados_alunos.csv";
+    private final String arquivoDados = "dados_alunos.bin";
     List<Aluno> listaAlunos;
 
     public DadosAlunos() {
@@ -81,7 +81,7 @@ public class DadosAlunos {
 
     public void removerAluno(int indexAluno) {
         try {
-            listaAlunos.remove(indexAluno);
+            listaAlunos.remove(indexAluno - 1);
             salvarDados();
         } catch (IndexOutOfBoundsException e) {
             System.err.println("O índice ndice fornecido está fora do intervalo. Não foi possível remover o aluno.");

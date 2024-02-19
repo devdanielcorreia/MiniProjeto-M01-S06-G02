@@ -16,7 +16,7 @@ public class DadosTurmas {
 
     Scanner scn = new Scanner(System.in);
 
-    private final String arquivoDados = "dados_turmas.csv";
+    private final String arquivoDados = "dados_turmas.bin";
     List<Turma> listaTurmas;
 
     public DadosTurmas() {

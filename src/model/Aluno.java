@@ -67,7 +67,7 @@ public class Aluno implements Serializable {
             result.append("Nenhum curso cadastrado.");
         } else {
             // Para cada curso na lista, adiciona o nome do curso ao resultado
-            listaCursos.forEach(curso -> result.append("\n- ").append(curso.getNome()));
+            listaCursos.forEach(curso -> result.append("\n- ").append(curso.getNome()).append(" - Professor: ").append(curso.getProfessor().getNome()));
         }
         // Converte o StringBuilder para String e o retorna
         return result.toString();

@@ -39,12 +39,10 @@ public class LoginService {
                     encerrarPrograma(scanner);
                     return;
                 case 1:
-                    fluxoLoginFuncionario(scanner);
-                    loginBemSucedido = true;
+                    loginBemSucedido = fluxoLoginFuncionario(scanner);
                     break;
                 case 2:
-                    fluxoLoginAluno(scanner);
-                    loginBemSucedido = true;
+                    loginBemSucedido = fluxoLoginAluno(scanner);
                     break;
                 default:
                     System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
@@ -59,7 +57,7 @@ public class LoginService {
         System.exit(0);
     }
 
-    private void fluxoLoginAluno(Scanner scanner) {
+    private boolean fluxoLoginAluno(Scanner scanner) {
         boolean loginBemSucedido = false;
 
         while (!loginBemSucedido) {
@@ -72,18 +70,23 @@ public class LoginService {
                 case 1:
                     usuarioLogado = dadosAlunos.adicionarAluno();
                     loginBemSucedido = true;
-                    break;
+                    return loginBemSucedido;
                 case 2:
                     loginBemSucedido = fluxoLoginUsuarioExistente(scanner, dadosAlunos.getListaAlunos(), "aluno");
-                    break;
+                    return loginBemSucedido;
                 case 0:
-                    return;
+                    return false;
+                default:
+                    System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
+                    break;
             }
         }
+        return loginBemSucedido;
     }
 
-    private void fluxoLoginFuncionario(Scanner scanner) {
-        while (true) {
+    private boolean fluxoLoginFuncionario(Scanner scanner) {
+        boolean loginBemSucedido = false;
+        while (!loginBemSucedido) {
             limparConsole();
             menuLoginFuncionario();
 
@@ -91,18 +94,22 @@ public class LoginService {
 
             switch (opcao) {
                 case 1:
-                    fluxoLoginDiretor(scanner);
-                    return;
+                    loginBemSucedido = fluxoLoginDiretor(scanner);
+                    return loginBemSucedido;
                 case 2:
-                    fluxoLoginProfessor(scanner);
-                    return;
+                    loginBemSucedido = fluxoLoginProfessor(scanner);
+                    return loginBemSucedido;
                 case 0:
-                    return;
+                    return false;
+                default:
+                    System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
             }
         }
+
+        return false;
     }
 
-    private void fluxoLoginDiretor(Scanner scanner) {
+    private boolean fluxoLoginDiretor(Scanner scanner) {
         boolean loginBemSucedido = false;
 
         while (!loginBemSucedido) {
@@ -115,17 +122,21 @@ public class LoginService {
                 case 1:
                     usuarioLogado = dadosDiretores.adicionarDiretor();
                     loginBemSucedido = true;
-                    break;
+                    return loginBemSucedido;
                 case 2:
                     loginBemSucedido = fluxoLoginUsuarioExistente(scanner, dadosDiretores.getListaDiretores(), "diretor");
-                    break;
+                    return loginBemSucedido;
                 case 0:
-                    return;
+                    return false;
+                default:
+                    System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
             }
         }
+
+        return false;
     }
 
-    private void fluxoLoginProfessor(Scanner scanner) {
+    private boolean fluxoLoginProfessor(Scanner scanner) {
         boolean loginBemSucedido = false;
 
         while (!loginBemSucedido) {
@@ -138,14 +149,18 @@ public class LoginService {
                 case 1:
                     usuarioLogado = dadosProfessores.adicionarProfessor();
                     loginBemSucedido = true;
-                    break;
+                    return loginBemSucedido;
                 case 2:
                     loginBemSucedido = fluxoLoginUsuarioExistente(scanner, dadosProfessores.getListaProfessores(), "professor");
-                    break;
+                    return loginBemSucedido;
                 case 0:
-                    return;
+                    return false;
+                default:
+                    System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
             }
         }
+
+        return false;
     }
 
     private boolean fluxoLoginUsuarioExistente(Scanner scanner, List<?> listaUsuarios, String tipoUsuario) {
@@ -182,7 +197,7 @@ public class LoginService {
             List<Diretor> listaDiretores = (List<Diretor>) listaUsuarios;
             for (int i = 0; i < listaDiretores.size(); i++) {
                 System.out.println((i + 1) + " - " + listaDiretores.get(i).getNome() +
-                        " - " + listaDiretores.get(i).getTempoDeCargo() + " ano de cargo" +
+                        " - " + listaDiretores.get(i).getTempoDeCargo() + " ano(s) de cargo" +
                         " - R$ " + listaDiretores.get(i).getSalario());
             }
         } else {
@@ -190,7 +205,7 @@ public class LoginService {
             for (int i = 0; i < listaUsuarios.size(); i++) {
                 System.out.println((i + 1) + " - " + listaProfessores.get(i).getNome() +
                         " - " + listaProfessores.get(i).getIdade() + " anos" +
-                        " - " + listaProfessores.get(i).getTempoTrabalho() + " ano de cargo" +
+                        " - " + listaProfessores.get(i).getTempoTrabalho() + " ano(s) de cargo" +
                         " - R$ " + listaProfessores.get(i).getSalario());
             }
         }

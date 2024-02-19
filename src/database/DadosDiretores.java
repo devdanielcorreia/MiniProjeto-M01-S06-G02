@@ -11,7 +11,7 @@ import static utils.ValidaEntradaUtils.*;
 public class DadosDiretores {
     Scanner scn = new Scanner(System.in);
 
-    private final String arquivoDados = "dados_diretores.csv";
+    private final String arquivoDados = "dados_diretores.bin";
     List<Diretor> listaDiretores;
 
     public DadosDiretores() {
@@ -67,7 +67,7 @@ public class DadosDiretores {
         System.out.println("Escolha o cargo do novo diretor:");
         int indiceMax = 0;
         for (CargoFuncionario cargo : CargoFuncionario.values()) {
-            System.out.println(cargo.getIndiceCargo() + ". " + cargo.name());
+            System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNomeCargo());
             indiceMax = cargo.getIndiceCargo();
         }
         int escolhaCargo = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);

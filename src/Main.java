@@ -2,9 +2,9 @@ import model.Aluno;
 import model.Diretor;
 import model.Professor;
 import service.AcoesAlunoService;
+import service.AcoesDiretorService;
 import service.LoginService;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 import static utils.ConsoleUtils.printLogoFMT;
@@ -30,6 +30,8 @@ public class Main {
             alunoService.iniciaFluxoAcoesAluno(entrada, alunoLogado);
         } else if (usuarioLogado instanceof Diretor) {
             Diretor diretorLogado = (Diretor) usuarioLogado;
+            AcoesDiretorService acoesDiretorService =  new AcoesDiretorService();
+            acoesDiretorService.iniciaFluxoAcoesDiretor(entrada, diretorLogado);
         } else if (usuarioLogado instanceof Professor) {
             Professor professorLogado = (Professor) usuarioLogado;
         } else {

@@ -81,7 +81,7 @@ public class Funcionario implements IFuncionario, Serializable {
 
     @Override
     public String toString() {
-        return "Funcionario{" + "nome='" + nome + '\'' + ", salario=" + salario + ", cargo=" + cargo + '}';
+        return "Funcionario{" + "nome='" + nome + '\'' + ", salario=" + salario + ", cargo=" + cargo.getNomeCargo() + '}';
     }
 }
 

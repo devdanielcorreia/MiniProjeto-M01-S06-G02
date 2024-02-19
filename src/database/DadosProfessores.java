@@ -1,7 +1,9 @@
 package database;
 
 import enumerations.CargoFuncionario;
+import model.Curso;
 import model.Professor;
+import model.Turma;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import static utils.ValidaEntradaUtils.*;
 public class DadosProfessores {
     Scanner scn = new Scanner(System.in);
 
-    private final String arquivoDados = "dados_professores.csv";
+    private final String arquivoDados = "dados_professores.bin";
     List<Professor> listaProfessores;
 
     public DadosProfessores() {
@@ -60,10 +62,10 @@ public class DadosProfessores {
     }
 
     private CargoFuncionario receberCargo() {
-        System.out.println("Escolha o cargo do novo professor:");
+        System.out.println("Escolha o cargo do professor:");
         int indiceMax = 0;
         for (CargoFuncionario cargo : CargoFuncionario.values()) {
-            System.out.println(cargo.getIndiceCargo() + ". " + cargo.name());
+            System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNomeCargo());
             indiceMax = cargo.getIndiceCargo();
         }
         int escolhaCargo = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
@@ -85,10 +87,36 @@ public class DadosProfessores {
         return validaInputInteger(scn);
     }
 
-    public void removerProfessor(int indexProfessor) {
+    public void removerProfessor(int indexProfessor, DadosTurmas dadosTurmas) {
         try {
-            listaProfessores.remove(indexProfessor);
+            List<Turma> listaTurmas = dadosTurmas.getlistaTurmas();
+            List<Turma> listaTurmasAtualizadas = new ArrayList<>();
+            Professor professorRemovido = listaProfessores.get(indexProfessor - 1);
+            for(Turma turma : listaTurmas) {
+                Curso curso = turma.getCurso();
+                if (curso.getProfessor().equals(professorRemovido)) {
+                    curso.setProfessor(null);
+                    listaTurmasAtualizadas.add(turma);
+                }
+            }
+
+            for (Turma turmaAtualizada : listaTurmasAtualizadas){
+                dadosTurmas.atualizarDados(turmaAtualizada);
+            }
+
+            listaProfessores.remove(indexProfessor - 1);
             salvarDados();
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
+        }
+    }
+
+    public void promoverProfessor(int indexProfessor) {
+        try {
+            CargoFuncionario novoCargo = receberCargo();
+            Professor professorPromovido = listaProfessores.get(indexProfessor - 1);
+            professorPromovido.setCargo(novoCargo);
+            atualizarDados(professorPromovido);
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
         }
@@ -123,6 +151,18 @@ public class DadosProfessores {
             System.out.println("Dados dos professores salvos com sucesso.");
         } catch (IOException e) {
             System.err.println("Erro ao salvar os dados dos professores: " + e.getMessage());
+        }
+    }
+
+    public void atualizarDados(Professor professorAtualizado) {
+        for (int i = 0; i < listaProfessores.size(); i++) {
+            Professor professor = listaProfessores.get(i);
+            if ((professor.getNome().equals(professorAtualizado.getNome())) &&
+                    (professor.getIdade() == professorAtualizado.getIdade())) {
+                listaProfessores.set(i, professorAtualizado);
+                salvarDados();
+                return;
+            }
         }
     }
 

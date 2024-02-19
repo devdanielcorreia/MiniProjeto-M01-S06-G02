@@ -45,11 +45,25 @@ public class Turma implements Serializable {
 
     // Métodos
     public void listarAlunos() {
-        // Implementação existente
+        if (listaAlunos.isEmpty()) {
+            System.out.println("\nTurma vazia.");
+        } else {
+            System.out.println("\nLista de Alunos da Turma: ");
+            for (Aluno aluno : listaAlunos) {
+                System.out.println("Aluno: " + aluno.getNome());
+            }
+        }
     }
 
     public void listarAlunosComIndice() {
-        // Implementação existente
+        if (listaAlunos.isEmpty()) {
+            System.out.println("\nTurma vazia.");
+        } else {
+            System.out.println("\nLista de Alunos da Turma: ");
+            for (int i = 0; i < listaAlunos.size(); i++) {
+                System.out.println((i + 1) + " - " + listaAlunos.get(i).getNome());
+            }
+        }
     }
 
     public void adicionarAluno(Aluno aluno) {
@@ -61,7 +75,10 @@ public class Turma implements Serializable {
     }
 
     public void removerAluno(Scanner entrada) {
-        // Implementação existente
+        listarAlunosComIndice();
+        System.out.print("\nDigite o indice do aluno que deseja remover: ");
+        listaAlunos.remove(entrada.nextInt());
+        entrada.nextLine();
     }
 
     // Método toString personalizado
