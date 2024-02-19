@@ -15,7 +15,7 @@ import static utils.ValidaEntradaUtils.*;
 public class DadosAlunos {
     Scanner scn = new Scanner(System.in);
 
-    private final String arquivoDados = "dados_alunos.csv";
+    private final String arquivoDados = "dados_alunos.bin";
     List<Aluno> listaAlunos;
 
     public DadosAlunos() {
@@ -28,7 +28,8 @@ public class DadosAlunos {
     }
 
     // MÉTODOS DA CLASSE
-    public void adicionarAluno() {
+    public Aluno adicionarAluno() {
+        Aluno novoAluno = null;
         try {
             String nomeNovoAluno = receberNome();
             int idadeNovoAluno = receberIdade();
@@ -37,15 +38,18 @@ public class DadosAlunos {
             List<Curso> listaCursosNovoAluno = new ArrayList<>();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaAlunos.add(new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, statusMatriculaNovoAluno));
+            novoAluno = new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, statusMatriculaNovoAluno);
+            listaAlunos.add(novoAluno);
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado ao sistema* \n");
             salvarDados();
+            return novoAluno;
         } catch (InputMismatchException e) {
             System.err.println("Erro de entrada. Por favor, insira um número para a idade.");
             scn.nextLine();
         }
+        return novoAluno;
     }
 
     private String receberNome() {
@@ -77,7 +81,7 @@ public class DadosAlunos {
 
     public void removerAluno(int indexAluno) {
         try {
-            listaAlunos.remove(indexAluno);
+            listaAlunos.remove(indexAluno - 1);
             salvarDados();
         } catch (IndexOutOfBoundsException e) {
             System.err.println("O índice ndice fornecido está fora do intervalo. Não foi possível remover o aluno.");
@@ -113,6 +117,18 @@ public class DadosAlunos {
             System.out.println("Dados dos alunos salvos com sucesso.");
         } catch (IOException e) {
             System.err.println("Erro ao salvar os dados dos alunos: " + e.getMessage());
+        }
+    }
+
+    public void atualizarDados(Aluno alunoAtualizado) {
+        for (int i = 0; i < listaAlunos.size(); i++) {
+            Aluno aluno = listaAlunos.get(i);
+            if ((aluno.getNome().equals(alunoAtualizado.getNome())) &&
+                    (aluno.getIdade() == alunoAtualizado.getIdade())) {
+                listaAlunos.set(i, alunoAtualizado);
+                salvarDados();
+                return;
+            }
         }
     }
 

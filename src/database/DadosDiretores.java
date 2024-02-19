@@ -11,7 +11,7 @@ import static utils.ValidaEntradaUtils.*;
 public class DadosDiretores {
     Scanner scn = new Scanner(System.in);
 
-    private final String arquivoDados = "dados_diretores.csv";
+    private final String arquivoDados = "dados_diretores.bin";
     List<Diretor> listaDiretores;
 
     public DadosDiretores() {
@@ -24,16 +24,19 @@ public class DadosDiretores {
     }
 
     // MÉTODOS DA CLASSE
-    public void adicionarDiretor() {
+    public Diretor adicionarDiretor() {
+        Diretor novoDiretor = null;
         try {
             String nomeNovoDiretor = receberNome();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaDiretores.add(new Diretor(nomeNovoDiretor, receberSalario(), receberCargo(), receberTempoTrabalho()));
+            novoDiretor = new Diretor(nomeNovoDiretor, receberSalario(), receberCargo(), receberTempoTrabalho());
+            listaDiretores.add(novoDiretor);
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoDiretor.toUpperCase() + " foi adicionado à lista* \n");
             salvarDados();
+            return novoDiretor;
         } catch (InputMismatchException e) {
             System.err.println("Entrada inválida. Por favor, verifique os dados inseridos.");
             scn.nextLine(); // Consome a entrada incorreta para evitar loops infinitos
@@ -42,6 +45,7 @@ public class DadosDiretores {
         } catch (Exception e) {
             System.err.println("Ocorreu um erro ao adicionar o diretor: " + e.getMessage());
         }
+        return novoDiretor;
     }
 
     private String receberNome() {
@@ -63,7 +67,7 @@ public class DadosDiretores {
         System.out.println("Escolha o cargo do novo diretor:");
         int indiceMax = 0;
         for (CargoFuncionario cargo : CargoFuncionario.values()) {
-            System.out.println(cargo.getIndiceCargo() + ". " + cargo.name());
+            System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNomeCargo());
             indiceMax = cargo.getIndiceCargo();
         }
         int escolhaCargo = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
