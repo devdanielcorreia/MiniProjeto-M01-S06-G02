@@ -1,11 +1,30 @@
+package database;
+
+import enumerations.CargoFuncionario;
+import model.Professor;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import static utils.ValidaEntradaUtils.*;
+
 public class DadosProfessores {
     Scanner scn = new Scanner(System.in);
-    List<Professor> listaProfessores = new ArrayList<>();
+
+    private final String arquivoDados = "dados_professores.csv";
+    List<Professor> listaProfessores;
+
+    public DadosProfessores() {
+        listaProfessores = new ArrayList<>();
+        carregarDados();
+    }
+
+    public List<Professor> getListaProfessores() {
+        return listaProfessores;
+    }
 
     // MÉTODOS DA CLASSE
     public void adicionarProfessor() {
@@ -17,6 +36,7 @@ public class DadosProfessores {
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoProfessor.toUpperCase() + " foi adicionado à lista* \n");
+            salvarDados();
         } catch (InputMismatchException e) {
             System.err.println("Erro de entrada. Por favor, insira um número inteiro para a idade e o tempo de trabalho.");
             scn.nextLine(); // Consome a entrada incorreta para evitar loops infinitos
@@ -27,59 +47,44 @@ public class DadosProfessores {
 
     private String receberNome() {
         System.out.print("Nome do novo professor: ");
-        return scn.nextLine();
+        return validaInputStringNaoVazia(scn);
     }
 
     private int receberSalario() {
         System.out.println("Digite o salário do novo professor: ");
-        int salarioNovoProfessor = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha do último input de int
-        return salarioNovoProfessor;
+        return validaInputInteger(scn);
     }
 
     private CargoFuncionario receberCargo() {
-        // Receber o Cargo Funcionario do professor por String
-        System.out.println("Cargo Funcionário do professor (INICIANTE, EXPERIENTE, AVANÇADO): ");
-        String cargoFuncionarioString = scn.nextLine();
-
-        // Loop em values CargoFuncionario
+        System.out.println("Escolha o cargo do novo professor:");
+        int indiceMax = 0;
         for (CargoFuncionario cargo : CargoFuncionario.values()) {
-            // Verificação se o que o usuário digitou existe em values()
-            if (cargo.name().equalsIgnoreCase(cargoFuncionarioString)) {
-                try {
-                    // Converter a string em um Enum CargoFuncionario utilizando o valueOf()
-                    return CargoFuncionario.valueOf(cargoFuncionarioString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    // Se ocorrer uma exceção, informar ao usuário e continuar o loop
-                    System.out.println("Cargo Funcionário inválido. Por favor, digite um cargo válido.");
-                    break;
-                }
-            }
+            System.out.println(cargo.getIndiceCargo() + ". " + cargo.name());
+            indiceMax = cargo.getIndiceCargo();
         }
+        int escolhaCargo = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
 
-        // Se não encontrar correspondência, informar ao usuário que o cargo é inválido e retornar null
-        System.out.println("Cargo Funcionário inválido. Por favor, digite um cargo válido.");
-        return null;
+        CargoFuncionario cargoNovoProfessor;
+
+        cargoNovoProfessor = CargoFuncionario.values()[escolhaCargo - 1];
+
+        return cargoNovoProfessor;
     }
 
     private int receberIdade() {
         System.out.print("Idade do novo professor: ");
-        int idadeNovoProfessor = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha do último input de int
-        return idadeNovoProfessor;
+        return validaInputInteger(scn);
     }
 
     private int receberTempoTrabalho() {
         System.out.print("Tempo de trabalho do novo professor: ");
-        int tempoTrabalhoNovoProfessor = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha do último input de int
-
-        return tempoTrabalhoNovoProfessor;
+        return validaInputInteger(scn);
     }
 
     public void removerProfessor(int indexProfessor) {
         try {
             listaProfessores.remove(indexProfessor);
+            salvarDados();
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
         }
@@ -97,9 +102,29 @@ public class DadosProfessores {
             System.err.println("Não foi possível localizar um professor com a ID " + idProfessor + " em nosso sistema.");
         }
     }
+
+    private void carregarDados() {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
+            listaProfessores = (List<Professor>) inputStream.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de dados de professores não encontrado. Será criado um novo arquivo.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao carregar os dados dos professores:" + e.getMessage());
+        }
+    }
+
+    private void salvarDados() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
+            outputStream.writeObject(listaProfessores);
+            System.out.println("Dados dos professores salvos com sucesso.");
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar os dados dos professores: " + e.getMessage());
+        }
+    }
+
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("DadosProfessores:\n");
+        StringBuilder result = new StringBuilder("database.DadosProfessores:\n");
         for (Professor professor : listaProfessores) {
             result.append(professor.toString()).append("\n");
         }

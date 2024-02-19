@@ -1,4 +1,15 @@
-public class Professor extends Funcionario {
+package model;
+
+import enumerations.CargoFuncionario;
+
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Professor extends Funcionario implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 3L;
+
     // Atributos
     private int idade;
     private int tempoTrabalho;

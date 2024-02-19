@@ -1,11 +1,31 @@
+package database;
+
+import enumerations.StatusMatricula;
+import model.Aluno;
+import model.Curso;
+
+import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+
+import static utils.ValidaEntradaUtils.*;
 
 public class DadosAlunos {
     Scanner scn = new Scanner(System.in);
-    List<Aluno> listaAlunos = new ArrayList<>();
+
+    private final String arquivoDados = "dados_alunos.csv";
+    List<Aluno> listaAlunos;
+
+    public DadosAlunos() {
+        listaAlunos = new ArrayList<>();
+        carregarDados();
+    }
+
+    public List<Aluno> getListaAlunos() {
+        return listaAlunos;
+    }
 
     // MÉTODOS DA CLASSE
     public void adicionarAluno() {
@@ -20,55 +40,45 @@ public class DadosAlunos {
             listaAlunos.add(new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, statusMatriculaNovoAluno));
 
             // FEEDBACK AO USUÁRIO
-            System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado à lista* \n");
+            System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado ao sistema* \n");
+            salvarDados();
         } catch (InputMismatchException e) {
             System.err.println("Erro de entrada. Por favor, insira um número para a idade.");
             scn.nextLine();
-        } finally {
         }
     }
 
     private String receberNome() {
         System.out.print("Nome do novo aluno: ");
-        return scn.nextLine();
+        return validaInputStringNaoVazia(scn);
     }
 
-    private int receberIdade(){
+    private int receberIdade() {
         System.out.print("Idade do novo aluno: ");
-        int idadeNovoAluno = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha
-
-        return idadeNovoAluno;
+        return validaInputInteger(scn);
     }
 
     private StatusMatricula receberStatusMatricula() {
         // Receber o Status da Matricula do aluno por String
-        System.out.println("Status da matrícula do aluno (ATIVO, TRANCADO, FORMADO): ");
-        String statusMatriculaString = scn.nextLine();
-
-        // Loop em values StatusMatricula
+        System.out.println("Escolha o status da matrícula do aluno:");
+        int indiceMax = 0;
         for (StatusMatricula status : StatusMatricula.values()) {
-            // Verificação se o que o usuário digitou existe em values()
-            if (status.name().equalsIgnoreCase(statusMatriculaString)) {
-                try {
-                    // Converter a string em um Enum CargoFuncionario utilizando o valueOf()
-                    return StatusMatricula.valueOf(statusMatriculaString.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    // Se ocorrer uma exceção, informar ao usuário e continuar o loop
-                    System.out.println("Status matrícula inválido. Por favor, digite um status válido.");
-                    break;
-                }
-            }
+            System.out.println(status.getIndice() + ". " + status.name());
+            indiceMax = status.getIndice();
         }
+        int indexStatus = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
 
-        // Se não encontrar correspondência, informar ao usuário que o status é inválido e retornar null
-        System.out.println("Status matrícula inválido. Por favor, digite um status válido.");
-        return null;
+        StatusMatricula statusMatricula;
+
+        statusMatricula = StatusMatricula.values()[indexStatus - 1];
+
+        return statusMatricula;
     }
 
     public void removerAluno(int indexAluno) {
         try {
             listaAlunos.remove(indexAluno);
+            salvarDados();
         } catch (IndexOutOfBoundsException e) {
             System.err.println("O índice ndice fornecido está fora do intervalo. Não foi possível remover o aluno.");
         }
@@ -84,6 +94,25 @@ public class DadosAlunos {
             }
         } catch (IllegalArgumentException e) {
             System.err.println("Não foi possível localizar um aluno com a ID " + idAluno + " em nosso sistema.");
+        }
+    }
+
+    private void carregarDados() {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
+            listaAlunos = (List<Aluno>) inputStream.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de dados de alunos não encontrado. Será criado um novo arquivo.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao carregar os dados dos alunos:" + e.getMessage());
+        }
+    }
+
+    private void salvarDados() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
+            outputStream.writeObject(listaAlunos);
+            System.out.println("Dados dos alunos salvos com sucesso.");
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar os dados dos alunos: " + e.getMessage());
         }
     }
 

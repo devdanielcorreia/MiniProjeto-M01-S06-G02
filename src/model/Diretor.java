@@ -1,6 +1,16 @@
+package model;
+
+import enumerations.CargoFuncionario;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
-public class Diretor extends Funcionario {
+public class Diretor extends Funcionario implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2L;
+
     // Atributos
     int tempoDeCargo; // Será adotado em anos
 

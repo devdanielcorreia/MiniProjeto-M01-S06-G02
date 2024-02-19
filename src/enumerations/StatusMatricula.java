@@ -1,6 +1,8 @@
+package enumerations;
+
 public enum StatusMatricula {
-    ATIVO(1),
-    TRANCADO(2),
+    ATIVA(1),
+    TRANCADA(2),
     FORMADO(3);
 
     public final int indice;

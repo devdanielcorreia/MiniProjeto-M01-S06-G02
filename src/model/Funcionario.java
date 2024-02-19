@@ -1,4 +1,11 @@
-public class Funcionario implements IFuncionario {
+package model;
+
+import enumerations.CargoFuncionario;
+import interfaces.IFuncionario;
+
+import java.io.Serializable;
+
+public class Funcionario implements IFuncionario, Serializable {
 
     // Atributos
     private String nome;
@@ -53,15 +60,15 @@ public class Funcionario implements IFuncionario {
             }
 
             switch (cargo) {
-                case INICIANTE:
+                case CargoFuncionario.INICIANTE:
                     cargo = CargoFuncionario.EXPERIENTE;
                     System.out.println("O funcionário " + nome + " foi promovido para " + cargo.name() + ".");
                     break;
-                case EXPERIENTE:
+                case CargoFuncionario.EXPERIENTE:
                     cargo = CargoFuncionario.AVANCADO;
                     System.out.println("O funcionário " + nome + " foi promovido para " + cargo.name() + ".");
                     break;
-                case AVANCADO:
+                case CargoFuncionario.AVANCADO:
                     System.out.println("O funcionário " + nome + " já alcançou o cargo máximo.");
                     break;
                 default:
@@ -74,7 +81,7 @@ public class Funcionario implements IFuncionario {
 
     @Override
     public String toString() {
-        return "Funcionario{" +  "nome='" + nome + '\'' + ", salario=" + salario + ", cargo=" + cargo + '}';
+        return "Funcionario{" + "nome='" + nome + '\'' + ", salario=" + salario + ", cargo=" + cargo + '}';
     }
 }
 

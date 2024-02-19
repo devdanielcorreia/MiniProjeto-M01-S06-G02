@@ -1,8 +1,18 @@
+package model;
+
+import enumerations.StatusMatricula;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-public class Aluno {
+public class Aluno implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     // Atributos
     private String nome;
     private int idade;

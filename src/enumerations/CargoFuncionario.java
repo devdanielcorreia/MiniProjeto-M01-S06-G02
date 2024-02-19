@@ -1,3 +1,5 @@
+package enumerations;
+
 public enum CargoFuncionario {
     INICIANTE(1),
     EXPERIENTE(2),

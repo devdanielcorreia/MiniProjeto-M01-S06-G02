@@ -1,8 +1,27 @@
+package database;
+
+import enumerations.CargoFuncionario;
+import model.Diretor;
+
+import java.io.*;
 import java.util.*;
+
+import static utils.ValidaEntradaUtils.*;
 
 public class DadosDiretores {
     Scanner scn = new Scanner(System.in);
-    List<Diretor> listaDiretores = new ArrayList<>();
+
+    private final String arquivoDados = "dados_diretores.csv";
+    List<Diretor> listaDiretores;
+
+    public DadosDiretores() {
+        listaDiretores = new ArrayList<>();
+        carregarDados();
+    }
+
+    public List<Diretor> getListaDiretores() {
+        return listaDiretores;
+    }
 
     // MÉTODOS DA CLASSE
     public void adicionarDiretor() {
@@ -14,6 +33,7 @@ public class DadosDiretores {
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoDiretor.toUpperCase() + " foi adicionado à lista* \n");
+            salvarDados();
         } catch (InputMismatchException e) {
             System.err.println("Entrada inválida. Por favor, verifique os dados inseridos.");
             scn.nextLine(); // Consome a entrada incorreta para evitar loops infinitos
@@ -26,40 +46,31 @@ public class DadosDiretores {
 
     private String receberNome() {
         System.out.print("Nome do novo diretor: ");
-        return scn.nextLine();
+        return validaInputStringNaoVazia(scn);
     }
 
     private int receberSalario() {
         System.out.print("Salário do novo diretor: ");
-        int salarioNovoDiretor = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha do último input de int
-        return salarioNovoDiretor;
+        return validaInputInteger(scn);
     }
 
     private int receberTempoTrabalho() {
         System.out.print("Tempo de trabalho do novo diretor: ");
-        int tempoTrabalhoNovoDiretor = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha do último input de int
-
-        return tempoTrabalhoNovoDiretor;
+        return validaInputInteger(scn);
     }
 
     private CargoFuncionario receberCargo() {
         System.out.println("Escolha o cargo do novo diretor:");
+        int indiceMax = 0;
         for (CargoFuncionario cargo : CargoFuncionario.values()) {
             System.out.println(cargo.getIndiceCargo() + ". " + cargo.name());
+            indiceMax = cargo.getIndiceCargo();
         }
-        int escolhaCargo = scn.nextInt();
-        scn.nextLine(); // consome quebra de linha do último input de int
+        int escolhaCargo = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
 
         CargoFuncionario cargoNovoDiretor;
 
-        if (escolhaCargo >= 1 && escolhaCargo <= CargoFuncionario.values().length) {
-            cargoNovoDiretor = CargoFuncionario.values()[escolhaCargo - 1];
-        } else {
-            System.out.println("Opção inválida. O cargo foi definido como null.");
-            cargoNovoDiretor = null;
-        }
+        cargoNovoDiretor = CargoFuncionario.values()[escolhaCargo - 1];
 
         return cargoNovoDiretor;
     }
@@ -67,6 +78,7 @@ public class DadosDiretores {
     public void removerDiretor(int indexDiretor) {
         try {
             listaDiretores.remove(indexDiretor);
+            salvarDados();
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
         }
@@ -84,6 +96,26 @@ public class DadosDiretores {
             System.err.println("Não foi possível localizar um diretor com a ID " + idDiretor + " em nosso sistema.");
         }
     }
+
+    private void carregarDados() {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
+            listaDiretores = (List<Diretor>) inputStream.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo de dados de diretores não encontrado. Será criado um novo arquivo.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Erro ao carregar os dados dos diretores:" + e.getMessage());
+        }
+    }
+
+    private void salvarDados() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
+            outputStream.writeObject(listaDiretores);
+            System.out.println("Dados dos diretores salvos com sucesso.");
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar os dados dos diretores: " + e.getMessage());
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder("DadosDiretores:\n");
