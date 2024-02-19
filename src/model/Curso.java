@@ -1,6 +1,10 @@
 package model;
 
-public class Curso {
+import java.io.Serializable;
+
+public class Curso implements Serializable {
+
+    private static final long serialVersionUID = 4L;
     // Atributos
     private String nome;
     private Professor professor;

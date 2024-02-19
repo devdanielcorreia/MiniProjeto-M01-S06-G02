@@ -107,7 +107,6 @@ public class Aluno implements Serializable {
     // sobrecarga do método removerCurso
     public void removerCurso(Scanner entrada) {
         // Exibe a lista de cursos com índices para o usuário
-        listarCursosComIndice();
         System.out.print("\nDigite o índice do curso que deseja remover: ");
         try {
             // Tenta ler o índice do curso como um inteiro

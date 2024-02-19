@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Scanner;
 
-public class Turma {
+public class Turma implements Serializable {
+    private static final long serialVersionUID = 4L;
     // Atributos
     private List<Aluno> listaAlunos;
     private int ano; // ano de início da turma

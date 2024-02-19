@@ -24,16 +24,19 @@ public class DadosDiretores {
     }
 
     // MÉTODOS DA CLASSE
-    public void adicionarDiretor() {
+    public Diretor adicionarDiretor() {
+        Diretor novoDiretor = null;
         try {
             String nomeNovoDiretor = receberNome();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaDiretores.add(new Diretor(nomeNovoDiretor, receberSalario(), receberCargo(), receberTempoTrabalho()));
+            novoDiretor = new Diretor(nomeNovoDiretor, receberSalario(), receberCargo(), receberTempoTrabalho());
+            listaDiretores.add(novoDiretor);
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoDiretor.toUpperCase() + " foi adicionado à lista* \n");
             salvarDados();
+            return novoDiretor;
         } catch (InputMismatchException e) {
             System.err.println("Entrada inválida. Por favor, verifique os dados inseridos.");
             scn.nextLine(); // Consome a entrada incorreta para evitar loops infinitos
@@ -42,6 +45,7 @@ public class DadosDiretores {
         } catch (Exception e) {
             System.err.println("Ocorreu um erro ao adicionar o diretor: " + e.getMessage());
         }
+        return novoDiretor;
     }
 
     private String receberNome() {

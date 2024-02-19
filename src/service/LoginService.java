@@ -15,6 +15,8 @@ import static utils.ValidaEntradaUtils.validaInputUsuarioRangeOpcoes;
 
 public class LoginService {
 
+    private Object usuarioLogado;
+
     private static final String TIPO_ALUNO = "aluno";
     private static final String TIPO_DIRETOR = "diretor";
 
@@ -24,7 +26,9 @@ public class LoginService {
 
     public void iniciaFluxoLogin(Scanner scanner) {
 
-        while (true) {
+        boolean loginBemSucedido = false;
+
+        while (!loginBemSucedido) {
 
             menuPrincipalLogin();
 
@@ -36,9 +40,11 @@ public class LoginService {
                     return;
                 case 1:
                     fluxoLoginFuncionario(scanner);
+                    loginBemSucedido = true;
                     break;
                 case 2:
                     fluxoLoginAluno(scanner);
+                    loginBemSucedido = true;
                     break;
                 default:
                     System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
@@ -64,7 +70,7 @@ public class LoginService {
 
             switch (operacao) {
                 case 1:
-                    dadosAlunos.adicionarAluno();
+                    usuarioLogado = dadosAlunos.adicionarAluno();
                     loginBemSucedido = true;
                     break;
                 case 2:
@@ -107,7 +113,7 @@ public class LoginService {
 
             switch (operacao) {
                 case 1:
-                    dadosDiretores.adicionarDiretor();
+                    usuarioLogado = dadosDiretores.adicionarDiretor();
                     loginBemSucedido = true;
                     break;
                 case 2:
@@ -130,7 +136,7 @@ public class LoginService {
 
             switch (operacao) {
                 case 1:
-                    dadosProfessores.adicionarProfessor();
+                    usuarioLogado = dadosProfessores.adicionarProfessor();
                     loginBemSucedido = true;
                     break;
                 case 2:
@@ -143,6 +149,10 @@ public class LoginService {
     }
 
     private boolean fluxoLoginUsuarioExistente(Scanner scanner, List<?> listaUsuarios, String tipoUsuario) {
+        if(listaUsuarios.isEmpty()){
+            System.out.println("Não há nenhum " + tipoUsuario + " cadastrado no sistema");
+            return false;
+        }
         exibirUsuariosExistente(listaUsuarios, tipoUsuario);
 
         while (true) {
@@ -154,6 +164,7 @@ public class LoginService {
             }
 
             System.out.println("Login realizado com sucesso para o " + tipoUsuario + ": " + listaUsuarios.get(opcao - 1) + "\n");
+            usuarioLogado = listaUsuarios.get(opcao - 1);
             return true;
         }
     }
@@ -184,6 +195,10 @@ public class LoginService {
             }
         }
 
+    }
+
+    public Object getUsuarioLogado() {
+        return usuarioLogado;
     }
 
 

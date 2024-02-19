@@ -27,22 +27,26 @@ public class DadosProfessores {
     }
 
     // MÉTODOS DA CLASSE
-    public void adicionarProfessor() {
+    public Professor adicionarProfessor() {
+        Professor novoProfessor = null;
         try {
             String nomeNovoProfessor = receberNome();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            listaProfessores.add(new Professor(nomeNovoProfessor, receberSalario(), receberCargo(), receberIdade(), receberTempoTrabalho()));
+            novoProfessor = new Professor(nomeNovoProfessor, receberSalario(), receberCargo(), receberIdade(), receberTempoTrabalho());
+            listaProfessores.add(novoProfessor);
 
             // FEEDBACK AO USUÁRIO
             System.out.println("*" + nomeNovoProfessor.toUpperCase() + " foi adicionado à lista* \n");
             salvarDados();
+            return novoProfessor;
         } catch (InputMismatchException e) {
             System.err.println("Erro de entrada. Por favor, insira um número inteiro para a idade e o tempo de trabalho.");
             scn.nextLine(); // Consome a entrada incorreta para evitar loops infinitos
         } catch (Exception e) {
             System.err.println("Ocorreu um erro inesperado: " + e.getMessage());
         }
+        return novoProfessor;
     }
 
     private String receberNome() {
