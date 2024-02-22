@@ -11,7 +11,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import static utils.ValidaEntradaUtils.*;
+import static utils.ValidacaoUtils.*;
 
 public class DadosProfessores {
     Scanner scn = new Scanner(System.in);
@@ -62,19 +62,12 @@ public class DadosProfessores {
     }
 
     private CargoFuncionario receberCargo() {
-        System.out.println("Escolha o cargo do professor:");
-        int indiceMax = 0;
-        for (CargoFuncionario cargo : CargoFuncionario.values()) {
-            System.out.println(cargo.getIndiceCargo() + ". " + cargo.getNomeCargo());
-            indiceMax = cargo.getIndiceCargo();
-        }
-        int escolhaCargo = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
-
-        CargoFuncionario cargoNovoProfessor;
-
-        cargoNovoProfessor = CargoFuncionario.values()[escolhaCargo - 1];
-
-        return cargoNovoProfessor;
+        // Receber o Cargo Funcionario do professor por String
+        System.out.println("Cargo Funcionário do professor (INICIANTE, EXPERIENTE, AVANÇADO): ");
+        // Loop para validar a entrada do usuário com os values de CargoFuncionario
+        String cargoFuncionarioString = validaCargoFuncionario(scn);
+        // Converter a string em um Enum CargoFuncionario utilizando o valueOf()
+        return CargoFuncionario.valueOf(cargoFuncionarioString.toUpperCase());
     }
 
     private int receberIdade() {
@@ -111,21 +104,19 @@ public class DadosProfessores {
         }
     }
 
-    public void promoverProfessor(int indexProfessor) {
+    public void promoverProfessor(Professor professor) {
         try {
-            CargoFuncionario novoCargo = receberCargo();
-            Professor professorPromovido = listaProfessores.get(indexProfessor - 1);
-            professorPromovido.setCargo(novoCargo);
-            atualizarDados(professorPromovido);
+            professor.promover();
+            atualizarDados(professor);
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Índice fornecido está fora do intervalo. Operação de remoção falhou.");
         }
     }
 
-    public void buscarProfessor(int idProfessor) {
+    public Professor buscarProfessor(int idProfessor) {
         try {
             if (idProfessor >= 0 && idProfessor < listaProfessores.size()) {
-                System.out.println("Resultado da busca para o ID " + idProfessor + ":");
+                System.out.println("Resultado da busca para o ID " + (idProfessor + 1) + ":");
                 System.out.println(listaProfessores.get(idProfessor));
             } else {
                 throw new IllegalArgumentException("ID fornecido é inválido.");
@@ -133,6 +124,7 @@ public class DadosProfessores {
         } catch (IllegalArgumentException e) {
             System.err.println("Não foi possível localizar um professor com a ID " + idProfessor + " em nosso sistema.");
         }
+        return listaProfessores.get(idProfessor);
     }
 
     private void carregarDados() {
@@ -156,9 +148,7 @@ public class DadosProfessores {
 
     public void atualizarDados(Professor professorAtualizado) {
         for (int i = 0; i < listaProfessores.size(); i++) {
-            Professor professor = listaProfessores.get(i);
-            if ((professor.getNome().equals(professorAtualizado.getNome())) &&
-                    (professor.getIdade() == professorAtualizado.getIdade())) {
+            if (listaProfessores.get(i).equals(professorAtualizado)) {
                 listaProfessores.set(i, professorAtualizado);
                 salvarDados();
                 return;

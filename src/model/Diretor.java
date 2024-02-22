@@ -29,7 +29,7 @@ public class Diretor extends Funcionario implements Serializable {
 
     // Método para listar alunos de uma turma
     public void listarAlunosTurma(Turma turma) {
-        turma.listarAlunos();
+        turma.listarAlunosComIndice();
     }
 
     // Método para adicionar aluno à turma

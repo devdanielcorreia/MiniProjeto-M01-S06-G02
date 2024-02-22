@@ -4,6 +4,7 @@ import enumerations.CargoFuncionario;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Professor extends Funcionario implements Serializable {
 
@@ -42,6 +43,19 @@ public class Professor extends Funcionario implements Serializable {
     public String toString() {
         // Utiliza o toString da superclasse Funcionario e adiciona as informações específicas do Professor
         return super.toString() + ", Idade=" + idade + ", Tempo de Trabalho=" + tempoTrabalho + " anos";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Professor professor = (Professor) o;
+        return idade == professor.idade && tempoTrabalho == professor.tempoTrabalho;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idade, tempoTrabalho);
     }
 }
 

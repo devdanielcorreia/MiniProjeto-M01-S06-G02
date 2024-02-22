@@ -6,7 +6,7 @@ import model.Diretor;
 import java.io.*;
 import java.util.*;
 
-import static utils.ValidaEntradaUtils.*;
+import static utils.ValidacaoUtils.*;
 
 public class DadosDiretores {
     Scanner scn = new Scanner(System.in);

@@ -6,7 +6,6 @@ import database.DadosTurmas;
 import enumerations.StatusMatricula;
 import model.Aluno;
 import model.Curso;
-import model.Professor;
 import model.Turma;
 
 import java.util.ArrayList;
@@ -15,20 +14,26 @@ import java.util.List;
 import java.util.Scanner;
 
 import static utils.ConsoleUtils.menuPrincipalAcoesAluno;
-import static utils.ValidaEntradaUtils.validaInputStringNaoVazia;
-import static utils.ValidaEntradaUtils.validaInputUsuarioRangeOpcoes;
+import static utils.ValidacaoUtils.*;
 
 public class AcoesAlunoService {
 
-    private DadosAlunos dadosAlunos = new DadosAlunos();
-    private DadosProfessores dadosProfessores = new DadosProfessores();
-    private DadosTurmas dadosTurmas = new DadosTurmas();
+    private DadosAlunos dadosAlunos;
+    private DadosProfessores dadosProfessores;
+    private DadosTurmas dadosTurmas;
+
+    public AcoesAlunoService(DadosAlunos dadosAlunos, DadosProfessores dadosProfessores, DadosTurmas dadosTurmas) {
+        this.dadosAlunos = dadosAlunos;
+        this.dadosProfessores = dadosProfessores;
+        this.dadosTurmas = dadosTurmas;
+    }
 
     public void iniciaFluxoAcoesAluno(Scanner scanner, Aluno alunoLogado) {
 
-        while (true) {
 
-            selecionarTurma(scanner, alunoLogado);
+        matriculaSeAindaNaoMatriculado(scanner, alunoLogado);
+
+        while (true) {
 
             menuPrincipalAcoesAluno(alunoLogado.getNome());
 
@@ -40,7 +45,7 @@ public class AcoesAlunoService {
                     listaCursosAluno(alunoLogado);
                     break;
                 case 2:
-                    adicionaCurso(scanner, alunoLogado);
+                    adicionarCurso(scanner, alunoLogado);
                     break;
                 case 3:
                     removeCurso(scanner, alunoLogado);
@@ -57,43 +62,64 @@ public class AcoesAlunoService {
     }
 
     private void listaCursosAluno(Aluno aluno) {
-        List<Curso> listaCursos = aluno.getListaCursos();
+        List<Curso> listaCursos = dadosTurmas.getCursosMatriculados(aluno);
         if (listaCursos.isEmpty()) {
             System.out.println("Você não está matriculado em nenhum curso no momento.");
         } else {
             System.out.println("LISTA DE CURSOS.");
             for (int i = 0; i < listaCursos.size(); i++) {
-                System.out.println(i + " - " + listaCursos.get(i).getNome() +
+                System.out.println((i + 1) + " - " + listaCursos.get(i).getNome() +
                         " - Professor: " + (listaCursos.get(i).getProfessor() != null ? listaCursos.get(i).getProfessor().getNome() : "Não Cadastrado"));
             }
         }
     }
 
-    private void adicionaCurso(Scanner scanner, Aluno aluno) {
-        System.out.println("Digite as informações do curso a ser adicionado.");
-        System.out.println("Nome do curso: ");
-        String nomeCurso = validaInputStringNaoVazia(scanner);
-        List<Professor> listaProfessores = dadosProfessores.getListaProfessores();
-        if (listaProfessores.isEmpty()) {
-            System.out.println("\nNão há nenhum professor cadastrado no momento. O curso será cadastrado sem um professor.");
+    private void adicionarCurso(Scanner scanner, Aluno aluno) {
+        List<Turma> listaTurmas = dadosTurmas.getlistaTurmas();
+        if (listaTurmas.isEmpty()) {
+            System.out.println("Não há nenhuma turma cadastrada no sistema.");
         } else {
-            System.out.println("\nSelecione o professor que leciona o curso: ");
-            for (int i = 0; i < listaProfessores.size(); i++) {
-                System.out.println(i + " - Professor " + listaProfessores.get(i).getNome());
+            System.out.println("Selecione uma turma para se matricular:");
+            System.out.println("LISTA DE TURMAS.");
+            for (int i = 0; i < listaTurmas.size(); i++) {
+                System.out.println((i + 1) + " - Curso: " + listaTurmas.get(i).getCurso().getNome() +
+                        " - Turma: " + listaTurmas.get(i).getAno() +
+                        " - Professor: " + (listaTurmas.get(i).getCurso().getProfessor() != null ? listaTurmas.get(i).getCurso().getProfessor().getNome() : "Não Cadastrado"));
             }
+            Turma turmaSelecionada = listaTurmas.get(validaInputUsuarioRangeOpcoes(scanner, 1, listaTurmas.size()) - 1);
+            if(!validaSeAlunoJaTemMatricula(turmaSelecionada, aluno)){
+                turmaSelecionada.adicionarAluno(aluno);
+                dadosTurmas.atualizarDados(turmaSelecionada);
+            } else {
+                System.out.println("Aluno já possui matrícula na Turma " + turmaSelecionada.getAno() + " do Curso " + turmaSelecionada.getCurso().getNome());
+            }
+
         }
-        Curso novoCurso = new Curso(nomeCurso, listaProfessores.get(validaInputUsuarioRangeOpcoes(scanner, 0, listaProfessores.size() - 1)));
-        aluno.adicionarCurso(novoCurso);
-        dadosAlunos.atualizarDados(aluno);
     }
 
-    private void removeCurso(Scanner scanner, Aluno aluno) {
-        listaCursosAluno(aluno);
-        List<Curso> listaCursos = aluno.getListaCursos();
-        if (!listaCursos.isEmpty()) {
-            aluno.removerCurso(scanner);
+    public void removeCurso(Scanner scanner, Aluno aluno) {
+        List<Turma> listaTurmas = dadosTurmas.getlistaTurmas();
+        List<Turma> turmasMatriculado = new ArrayList<>();
+
+        for (Turma turma : listaTurmas) {
+            if (turma.getListaAlunos().contains(aluno)) {
+                turmasMatriculado.add(turma);
+            }
         }
-        dadosAlunos.atualizarDados(aluno);
+
+        listaCursosAluno(aluno);
+
+        if(!turmasMatriculado.isEmpty()){
+            System.out.println("Digite o número do curso do qual deseja sair:");
+            int opcao = validaInputUsuarioRangeOpcoes(scanner, 1, listaTurmas.size()) - 1;
+
+            Turma turmaSelecionada = turmasMatriculado.get(opcao);
+            turmaSelecionada.removerAluno(aluno);
+            System.out.println("Você foi removido do curso " + turmaSelecionada.getCurso().getNome() + " com sucesso.");
+            dadosTurmas.atualizarDados(turmaSelecionada);
+        }
+
+
     }
 
     private void alteraStatusMatricula(Scanner scanner, Aluno aluno) {
@@ -124,19 +150,14 @@ public class AcoesAlunoService {
         dadosAlunos.atualizarDados(aluno);
     }
 
-    private void selecionarTurma(Scanner scanner, Aluno aluno) {
-        List<Turma> listaTurmas = dadosTurmas.getlistaTurmas();
-        if (listaTurmas.isEmpty()) {
-            System.out.println("Não há nenhuma turma cadastrada no sistema.");
-        } else {
-            System.out.println("Selecione uma turma para se matricular:");
-            System.out.println("LISTA DE TURMAS.");
-            for (int i = 0; i < listaTurmas.size(); i++) {
-                System.out.println(i + " - " + listaTurmas.get(i).getCurso().getNome() +
-                        " - Professor: " + (listaTurmas.get(i).getCurso().getProfessor() != null ? listaTurmas.get(i).getCurso().getProfessor().getNome() : "Não Cadastrado"));
+    private void matriculaSeAindaNaoMatriculado(Scanner scanner, Aluno alunoLogado){
+        if(dadosTurmas.getCursosMatriculados(alunoLogado).isEmpty()){
+            System.out.println("\nVocê ainda não está matriculado em nenhum Curso. ");
+            System.out.println("Gostaria de verificar os Cursos disponíveis e realizar sua matrícula agora? (S/N)");
+            String entrada =validaInputStringNaoVazia(scanner);
+            if(entrada.equalsIgnoreCase("S")){
+                adicionarCurso(scanner, alunoLogado);
             }
-            Turma turmaSelecionada = listaTurmas.get(validaInputUsuarioRangeOpcoes(scanner, 0, listaTurmas.size() - 1));
-            turmaSelecionada.adicionarAluno(aluno);
         }
     }
 
