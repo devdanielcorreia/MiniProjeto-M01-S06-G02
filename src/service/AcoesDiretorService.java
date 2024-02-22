@@ -1,30 +1,39 @@
 package service;
 
 import database.DadosAlunos;
-import database.DadosDiretores;
 import database.DadosProfessores;
 import database.DadosTurmas;
 import model.*;
 
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static utils.ConsoleUtils.listarAlunos;
 import static utils.ConsoleUtils.menuPrincipalAcoesDiretor;
-import static utils.ValidaEntradaUtils.*;
+import static utils.ValidacaoUtils.*;
 
 public class AcoesDiretorService {
 
-    private DadosAlunos dadosAlunos = new DadosAlunos();
-    private DadosProfessores dadosProfessores = new DadosProfessores();
-    private DadosDiretores dadosDiretores = new DadosDiretores();
-    private DadosTurmas dadosTurmas = new DadosTurmas();
+    private DadosAlunos dadosAlunos;
+    private DadosProfessores dadosProfessores;
+    private DadosTurmas dadosTurmas;
+    private Diretor diretor;
 
-    public void iniciaFluxoAcoesDiretor(Scanner scanner, Diretor diretorLogado) {
+    public AcoesDiretorService(DadosAlunos dadosAlunos, DadosProfessores dadosProfessores, DadosTurmas dadosTurmas, Diretor diretor) {
+        this.dadosAlunos = dadosAlunos;
+        this.dadosProfessores = dadosProfessores;
+        this.dadosTurmas = dadosTurmas;
+        this.diretor = diretor;
+    }
+
+    public void iniciaFluxoAcoesDiretor(Scanner scanner) {
 
         while (true) {
 
-            menuPrincipalAcoesDiretor(diretorLogado.getNome());
+            matriculaAlunosSemTurma();
+
+            cadastrarProfessorTurmaSemProfessor();
+
+            menuPrincipalAcoesDiretor(diretor.getNome());
 
             int acaoDiretor = validaInputUsuarioRangeOpcoes(scanner, 0, 12);
             switch (acaoDiretor) {
@@ -62,9 +71,6 @@ public class AcoesDiretorService {
                     break;
                 case 11:
                     removerAlunoTurma(scanner);
-                    break;
-                case 12:
-                    listarTodosUsuarios();
                     break;
                 default:
                     System.out.println("Comando inválido. Use um dos comandos informados anteriormente. \n");
@@ -114,7 +120,8 @@ public class AcoesDiretorService {
         listarProfessores();
         if (!dadosProfessores.getListaProfessores().isEmpty()) {
             System.out.println("\nDigite o ID do professor a ser promovido.");
-            dadosProfessores.promoverProfessor(validaInputInteger(scanner));
+            Professor professorPromovido = dadosProfessores.buscarProfessor(validaInputUsuarioRangeOpcoes(scanner, 1, dadosProfessores.getListaProfessores().size()) - 1);
+            dadosProfessores.promoverProfessor(professorPromovido);
         }
     }
 
@@ -126,7 +133,10 @@ public class AcoesDiretorService {
             System.out.println("\nDigite o nome do Curso a ser criado junto da Turma.");
             String nomeCurso = validaInputStringNaoVazia(scanner);
             Curso novoCurso = new Curso(nomeCurso, professorTurma);
-            dadosTurmas.adicionarTurma(novoCurso);
+            List<Aluno> listaAlunosTurma = new ArrayList<>();
+            System.out.print("Digite o ano da nova turma: ");
+            Turma novaTurma = diretor.criarTurma(listaAlunosTurma, validaInputInteger(scanner), novoCurso);
+            dadosTurmas.adicionarTurma(novaTurma);
         } else {
             System.out.println("Não há nenhum Professor disponível no sistema para lecionar no momento!");
             System.out.println("Para prosseguir com a criação da Turma, realize antes a contratação de um novo Professor.\n");
@@ -138,7 +148,7 @@ public class AcoesDiretorService {
         if (!dadosTurmas.getlistaTurmas().isEmpty()) {
             System.out.println("\nDigite o ID de uma Turma para listar os alunos matriculados.");
             Turma turma = dadosTurmas.getlistaTurmas().get(validaInputUsuarioRangeOpcoes(scanner, 1, dadosTurmas.getlistaTurmas().size()) - 1);
-            turma.listarAlunosComIndice();
+            diretor.listarAlunosTurma(turma);
         }
     }
 
@@ -150,8 +160,8 @@ public class AcoesDiretorService {
             listarAlunos(dadosAlunos);
             if (!dadosAlunos.getListaAlunos().isEmpty()) {
                 System.out.println("\nDigite o ID do Aluno que será matriculado na Turma: " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
-                Aluno alunoMatricular = dadosAlunos.getListaAlunos().get(validaInputUsuarioRangeOpcoes(scanner, 1, dadosAlunos.getListaAlunos().size()) - 1);
-                turma.adicionarAluno(alunoMatricular);
+                Aluno alunoMatricular = dadosAlunos.buscarAluno(validaInputUsuarioRangeOpcoes(scanner, 1, dadosAlunos.getListaAlunos().size()) - 1);
+                diretor.adicionarAlunoTurma(turma, alunoMatricular);
                 dadosTurmas.atualizarDados(turma);
                 System.out.println("\nAluno " + alunoMatricular.getNome() + " matriculado na Turma " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
             }
@@ -167,18 +177,13 @@ public class AcoesDiretorService {
                 turma.listarAlunosComIndice();
                 System.out.println("\nDigite o ID do Aluno que será removido da Turma: " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
                 Aluno alunoRemover = turma.getListaAlunos().get(validaInputUsuarioRangeOpcoes(scanner, 1, turma.getListaAlunos().size()) - 1);
-                turma.removerAluno(alunoRemover);
+                diretor.removerAlunoTurma(turma, alunoRemover);
                 dadosTurmas.atualizarDados(turma);
                 System.out.println("\nAluno " + alunoRemover.getNome() + " removido da Turma " + turma.getAno() + " do Curso " + turma.getCurso().getNome());
             } else {
                 System.out.println("Turma selecionada não tem nenhum aluno matrículado.");
             }
         }
-    }
-
-    private void listarTodosUsuarios() {
-        listarAlunos(dadosAlunos);
-        listarProfessores();
     }
 
     private void listarTurmas() {
@@ -192,4 +197,100 @@ public class AcoesDiretorService {
             }
         }
     }
+
+    private void matriculaAlunosSemTurma(){
+        List<Aluno> alunosNaoMatriculados = getAlunosNaoMatriculados();
+        if(dadosTurmas.getlistaTurmas().isEmpty() && !alunosNaoMatriculados.isEmpty()){
+            System.out.println("\nALERTA!");
+            System.out.println("OS ALUNOS ABAIXO NÃO ESTÃO MATRICULADOS EM NENHUMA TURMA E NÃO HÁ NENHUMA TURMA CADASTRADA NO SISTEMA.");
+            System.out.println("PARA REGULARIZAR OS REGISTROS, CADASTRE UMA TURMA/CURSO E MATRICULE OS ALUNOS:");
+            int index = 1;
+            for (Aluno aluno : alunosNaoMatriculados){
+                System.out.println(index + " - " +  aluno.getNome());
+                index++;
+            }
+        } else if (!alunosNaoMatriculados.isEmpty()){
+            System.out.println("\nALERTA!");
+            System.out.println("OS ALUNOS ABAIXO NÃO ESTÃO MATRICULADOS EM NENHUMA TURMA.");
+            System.out.println("PARA REGULARIZAR OS REGISTROS, MATRICULE OS ALUNOS EM ALGUMA TURMA/CURSO:");
+
+            int index = 1;
+            for (Aluno aluno : alunosNaoMatriculados){
+                System.out.println(index + " - " +  aluno.getNome());
+                index++;
+            }
+        }
+    }
+
+    public List<Aluno> getAlunosNaoMatriculados() {
+        List<Aluno> todosAlunos = dadosAlunos.getListaAlunos();
+        List<Turma> listaTurmas = dadosTurmas.getlistaTurmas();
+        List<Aluno> alunosNaoMatriculados = new ArrayList<>();
+        Map<Turma, List<Aluno>> mapAlunoTurma = new LinkedHashMap<>();
+
+        for (Turma turma : listaTurmas) {
+            List<Aluno> alunos = turma.getListaAlunos();
+            for (Aluno aluno : alunos) {
+                if (!mapAlunoTurma.containsKey(turma)) {
+                    mapAlunoTurma.put(turma, new ArrayList<>());
+                }
+                mapAlunoTurma.get(turma).add(aluno);
+            }
+        }
+
+        for (Aluno aluno : todosAlunos) {
+            boolean alunoMatriculado = false;
+            for (List<Aluno> alunosDaTurma : mapAlunoTurma.values()) {
+                if (alunosDaTurma.contains(aluno)) {
+                    alunoMatriculado = true;
+                    break;
+                }
+            }
+            if (!alunoMatriculado) {
+                alunosNaoMatriculados.add(aluno);
+            }
+        }
+
+        return alunosNaoMatriculados;
+    }
+
+    private void cadastrarProfessorTurmaSemProfessor(){
+        List<Turma> listaTurmasSemProfessorComAlunos = getTurmasSemProfessorComAlunos();
+
+        if(dadosProfessores.getListaProfessores().isEmpty() && !listaTurmasSemProfessorComAlunos.isEmpty()){
+            System.out.println("\nALERTA!");
+            System.out.println("AS TURMAS ABAIXO NÃO TEM NENHUM PROFESSOR CADASTRADO E NÃO HÁ NENHUM PROFESSOR CADASTRADA NO SISTEMA.");
+            System.out.println("PARA REGULARIZAR OS REGISTROS E PARA QUE OS ALUNOS NÃO FIQUEM SEM PROFESSOR, CADASTRE UM PROFESSOR E ADICIONE-O A TURMA:");
+            int index = 1;
+            for (Turma turma : listaTurmasSemProfessorComAlunos){
+                System.out.println(index + " - " +  turma.getCurso().getNome());
+                index++;
+            }
+        } else if (!listaTurmasSemProfessorComAlunos.isEmpty()){
+            System.out.println("\nALERTA!");
+            System.out.println("AS TURMAS ABAIXO NÃO TEM NENHUM PROFESSOR CADASTRADO.");
+            System.out.println("PARA REGULARIZAR OS REGISTROS E PARA QUE OS ALUNOS NÃO FIQUEM SEM PROFESSOR, CADASTRE UM PROFESSOR PARA DAR AULA NA TURMA:");
+
+            int index = 1;
+            for (Turma turma : listaTurmasSemProfessorComAlunos){
+                System.out.println(index + " - " +  turma.getCurso().getNome());
+                index++;
+            }
+        }
+
+    }
+
+    public List<Turma> getTurmasSemProfessorComAlunos() {
+        List<Turma> listaTurmas = dadosTurmas.getlistaTurmas();
+        List<Turma> listaTurmasSemProfessor = new ArrayList<>();
+
+        for (Turma turma : listaTurmas) {
+            if(turma.getCurso().getProfessor() == null && !turma.getListaAlunos().isEmpty()){
+                listaTurmasSemProfessor.add(turma);
+            }
+        }
+
+        return listaTurmasSemProfessor;
+    }
+
 }

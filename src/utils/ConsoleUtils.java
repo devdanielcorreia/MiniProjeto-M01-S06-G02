@@ -95,7 +95,6 @@ public class ConsoleUtils {
         System.out.println("  9 - Listar Alunos de uma Turma;");
         System.out.println("  10 - Adicionar Aluno a uma Turma;");
         System.out.println("  11 - Remover Aluno de uma Turma;");
-        System.out.println("  12 - Listar Todos os Usuários;");
         System.out.println("  0 - Encerrar sessão.");
     }
 
@@ -104,6 +103,7 @@ public class ConsoleUtils {
         System.out.println("  1 - Listar Alunos de uma Turma;");
         System.out.println("  2 - Adicionar Aluno a uma Turma;");
         System.out.println("  3 - Remover Aluno de uma Turma;");
+        System.out.println("  4 - Formar Aluno de uma Turma;");
         System.out.println("  0 - Encerrar sessão.");
     }
 

@@ -11,18 +11,25 @@ import java.util.List;
 import java.util.Scanner;
 
 import static utils.ConsoleUtils.*;
-import static utils.ValidaEntradaUtils.validaInputUsuarioRangeOpcoes;
+import static utils.ValidacaoUtils.validaInputUsuarioRangeOpcoes;
 
 public class LoginService {
 
     private Object usuarioLogado;
+    private DadosAlunos dadosAlunos;
+    private DadosProfessores dadosProfessores;
+    private DadosDiretores dadosDiretores;
+
+
 
     private static final String TIPO_ALUNO = "aluno";
     private static final String TIPO_DIRETOR = "diretor";
 
-    private DadosAlunos dadosAlunos = new DadosAlunos();
-    private DadosProfessores dadosProfessores = new DadosProfessores();
-    private DadosDiretores dadosDiretores = new DadosDiretores();
+    public LoginService(DadosAlunos dadosAlunos, DadosProfessores dadosProfessores, DadosDiretores dadosDiretores) {
+        this.dadosAlunos = dadosAlunos;
+        this.dadosProfessores = dadosProfessores;
+        this.dadosDiretores = dadosDiretores;
+    }
 
     public void iniciaFluxoLogin(Scanner scanner) {
 
@@ -186,6 +193,7 @@ public class LoginService {
 
     private void exibirUsuariosExistente(List<?> listaUsuarios, String tipoUsuario) {
         System.out.println("Selecione o usuário para logar no sistema: \n");
+
         if (tipoUsuario.equals(TIPO_ALUNO)) {
             List<Aluno> listaAlunos = (List<Aluno>) listaUsuarios;
             for (int i = 0; i < listaAlunos.size(); i++) {
@@ -193,14 +201,16 @@ public class LoginService {
                         " - " + listaAlunos.get(i).getIdade() + " anos" +
                         " - Matrícula " + listaAlunos.get(i).getStatusMatricula());
             }
-        } else if (tipoUsuario.equals(TIPO_DIRETOR)) {
+        }
+        else if (tipoUsuario.equals(TIPO_DIRETOR)) {
             List<Diretor> listaDiretores = (List<Diretor>) listaUsuarios;
             for (int i = 0; i < listaDiretores.size(); i++) {
                 System.out.println((i + 1) + " - " + listaDiretores.get(i).getNome() +
                         " - " + listaDiretores.get(i).getTempoDeCargo() + " ano(s) de cargo" +
                         " - R$ " + listaDiretores.get(i).getSalario());
             }
-        } else {
+        }
+        else {
             List<Professor> listaProfessores = (List<Professor>) listaUsuarios;
             for (int i = 0; i < listaUsuarios.size(); i++) {
                 System.out.println((i + 1) + " - " + listaProfessores.get(i).getNome() +

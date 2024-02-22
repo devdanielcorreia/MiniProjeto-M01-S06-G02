@@ -6,15 +6,9 @@ import model.Turma;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
-
-import static utils.ValidaEntradaUtils.validaInputInteger;
 
 public class DadosTurmas {
-
-    Scanner scn = new Scanner(System.in);
 
     private final String arquivoDados = "dados_turmas.bin";
     List<Turma> listaTurmas;
@@ -29,29 +23,9 @@ public class DadosTurmas {
     }
 
     // MÉTODOS DA CLASSE
-    public void adicionarTurma(Curso curso) {
-        Turma novaTurma = null;
-        try {
-            int anoTurma = receberAno();
-
-            List<Aluno> listaAlunosTurma = new ArrayList<>();
-
-            // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            novaTurma = new Turma(listaAlunosTurma, anoTurma, curso);
-            listaTurmas.add(novaTurma);
-
-            // FEEDBACK AO USUÁRIO
-            System.out.println("*Turma do curso " + curso + " foi adicionado ao sistema* \n");
-            salvarDados();
-        } catch (InputMismatchException e) {
-            System.err.println("Erro de entrada. Por favor, insira um número para o ano.");
-            scn.nextLine();
-        }
-    }
-
-    private int receberAno() {
-        System.out.print("Digite o ano da nova turma: ");
-        return validaInputInteger(scn);
+    public void adicionarTurma(Turma novaTurma) {
+        listaTurmas.add(novaTurma);
+        salvarDados();
     }
 
     public void removerTurma(int indexTurma) {
@@ -76,6 +50,18 @@ public class DadosTurmas {
         }
     }
 
+    public List<Curso> getCursosMatriculados(Aluno aluno) {
+        List<Curso> cursosMatriculados = new ArrayList<>();
+
+        for (Turma turma : listaTurmas) {
+            if (turma.getListaAlunos().contains(aluno)) {
+                cursosMatriculados.add(turma.getCurso());
+            }
+        }
+
+        return cursosMatriculados;
+    }
+
     private void carregarDados() {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
             listaTurmas = (List<Turma>) inputStream.readObject();
@@ -97,9 +83,7 @@ public class DadosTurmas {
 
     public void atualizarDados(Turma turmaAtualizada) {
         for (int i = 0; i < listaTurmas.size(); i++) {
-            Turma turma = listaTurmas.get(i);
-            if ((turma.getCurso().equals(turmaAtualizada.getCurso())) &&
-                    (turma.getAno() == turmaAtualizada.getAno())) {
+            if (listaTurmas.get(i).equals(turmaAtualizada)) {
                 listaTurmas.set(i, turmaAtualizada);
                 salvarDados();
                 return;

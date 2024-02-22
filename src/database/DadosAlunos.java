@@ -10,7 +10,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import static utils.ValidaEntradaUtils.*;
+import static utils.ValidacaoUtils.*;
 
 public class DadosAlunos {
     Scanner scn = new Scanner(System.in);
@@ -38,7 +38,7 @@ public class DadosAlunos {
             List<Curso> listaCursosNovoAluno = new ArrayList<>();
 
             // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            novoAluno = new Aluno(nomeNovoAluno, idadeNovoAluno, listaCursosNovoAluno, statusMatriculaNovoAluno);
+            novoAluno = new Aluno(nomeNovoAluno, idadeNovoAluno, statusMatriculaNovoAluno);
             listaAlunos.add(novoAluno);
 
             // FEEDBACK AO USUÁRIO
@@ -64,19 +64,11 @@ public class DadosAlunos {
 
     private StatusMatricula receberStatusMatricula() {
         // Receber o Status da Matricula do aluno por String
-        System.out.println("Escolha o status da matrícula do aluno:");
-        int indiceMax = 0;
-        for (StatusMatricula status : StatusMatricula.values()) {
-            System.out.println(status.getIndice() + ". " + status.name());
-            indiceMax = status.getIndice();
-        }
-        int indexStatus = validaInputUsuarioRangeOpcoes(scn, 1, indiceMax);
-
-        StatusMatricula statusMatricula;
-
-        statusMatricula = StatusMatricula.values()[indexStatus - 1];
-
-        return statusMatricula;
+        System.out.println("Status da matrícula do aluno (ATIVA, TRANCADA, FORMADO): ");
+        // Loop para validar a entrada do usuário com os values de StatusMatricula
+        String statusMatriculaString = validaStatusMatricula(scn);
+        // Converter a string em um Enum CargoFuncionario utilizando o valueOf()
+        return StatusMatricula.valueOf(statusMatriculaString.toUpperCase());
     }
 
     public void removerAluno(int indexAluno) {
@@ -88,10 +80,10 @@ public class DadosAlunos {
         }
     }
 
-    public void buscarAluno(int idAluno) {
+    public Aluno buscarAluno(int idAluno) {
         try {
             if (idAluno >= 0 && idAluno < listaAlunos.size()) {
-                System.out.println("Resultado da busca para o ID " + idAluno + ":");
+                System.out.println("Resultado da busca para o ID " + (idAluno + 1) + ":");
                 System.out.println(listaAlunos.get(idAluno));
             } else {
                 throw new IllegalArgumentException("ID fornecido é inválido.");
@@ -99,6 +91,7 @@ public class DadosAlunos {
         } catch (IllegalArgumentException e) {
             System.err.println("Não foi possível localizar um aluno com a ID " + idAluno + " em nosso sistema.");
         }
+        return listaAlunos.get(idAluno);
     }
 
     private void carregarDados() {
@@ -122,9 +115,7 @@ public class DadosAlunos {
 
     public void atualizarDados(Aluno alunoAtualizado) {
         for (int i = 0; i < listaAlunos.size(); i++) {
-            Aluno aluno = listaAlunos.get(i);
-            if ((aluno.getNome().equals(alunoAtualizado.getNome())) &&
-                    (aluno.getIdade() == alunoAtualizado.getIdade())) {
+            if (listaAlunos.get(i).equals(alunoAtualizado)) {
                 listaAlunos.set(i, alunoAtualizado);
                 salvarDados();
                 return;
