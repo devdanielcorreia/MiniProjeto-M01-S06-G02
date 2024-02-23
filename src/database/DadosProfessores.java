@@ -4,6 +4,7 @@ import enumerations.CargoFuncionario;
 import model.Curso;
 import model.Professor;
 import model.Turma;
+import utils.ManipularDadosUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -128,8 +129,8 @@ public class DadosProfessores {
     }
 
     private void carregarDados() {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
-            listaProfessores = (List<Professor>) inputStream.readObject();
+        try {
+            ManipularDadosUtils.carregarDados(arquivoDados, listaProfessores);
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo de dados de professores não encontrado. Será criado um novo arquivo.");
         } catch (IOException | ClassNotFoundException e) {
@@ -138,21 +139,19 @@ public class DadosProfessores {
     }
 
     private void salvarDados() {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
-            outputStream.writeObject(listaProfessores);
-            System.out.println("Dados dos professores salvos com sucesso.");
+        try {
+            ManipularDadosUtils.salvarDados(arquivoDados, listaProfessores);
         } catch (IOException e) {
             System.err.println("Erro ao salvar os dados dos professores: " + e.getMessage());
         }
     }
 
     public void atualizarDados(Professor professorAtualizado) {
-        for (int i = 0; i < listaProfessores.size(); i++) {
-            if (listaProfessores.get(i).equals(professorAtualizado)) {
-                listaProfessores.set(i, professorAtualizado);
-                salvarDados();
-                return;
-            }
+        try {
+            ManipularDadosUtils.atualizarDados(arquivoDados, listaProfessores, professorAtualizado);
+        } catch (IOException e) {
+            // Tratamento de exceção de IO
+            System.err.println("Erro ao atualizar os dados do professor: " + professorAtualizado + " - Causa: " + e.getMessage());
         }
     }
 

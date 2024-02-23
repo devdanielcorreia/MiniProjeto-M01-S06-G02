@@ -3,6 +3,7 @@ package database;
 import model.Aluno;
 import model.Curso;
 import model.Turma;
+import utils.ManipularDadosUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -63,8 +64,8 @@ public class DadosTurmas {
     }
 
     private void carregarDados() {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
-            listaTurmas = (List<Turma>) inputStream.readObject();
+        try {
+            ManipularDadosUtils.carregarDados(arquivoDados, listaTurmas);
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo de dados de turmas não encontrado. Será criado um novo arquivo.");
         } catch (IOException | ClassNotFoundException e) {
@@ -73,21 +74,19 @@ public class DadosTurmas {
     }
 
     private void salvarDados() {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
-            outputStream.writeObject(listaTurmas);
-            System.out.println("Dados das turmas salvos com sucesso.");
+        try {
+            ManipularDadosUtils.salvarDados(arquivoDados, listaTurmas);
         } catch (IOException e) {
             System.err.println("Erro ao salvar os dados das turmas: " + e.getMessage());
         }
     }
 
     public void atualizarDados(Turma turmaAtualizada) {
-        for (int i = 0; i < listaTurmas.size(); i++) {
-            if (listaTurmas.get(i).equals(turmaAtualizada)) {
-                listaTurmas.set(i, turmaAtualizada);
-                salvarDados();
-                return;
-            }
+        try {
+            ManipularDadosUtils.atualizarDados(arquivoDados, listaTurmas, turmaAtualizada);
+        } catch (IOException e) {
+            // Tratamento de exceção de IO
+            System.err.println("Erro ao atualizar os dados do professor: " + turmaAtualizada + " - Causa: " + e.getMessage());
         }
     }
 
