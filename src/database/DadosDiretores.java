@@ -2,6 +2,7 @@ package database;
 
 import enumerations.CargoFuncionario;
 import model.Diretor;
+import utils.ManipularDadosUtils;
 
 import java.io.*;
 import java.util.*;
@@ -102,8 +103,8 @@ public class DadosDiretores {
     }
 
     private void carregarDados() {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
-            listaDiretores = (List<Diretor>) inputStream.readObject();
+        try {
+            ManipularDadosUtils.carregarDados(arquivoDados, listaDiretores);
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo de dados de diretores não encontrado. Será criado um novo arquivo.");
         } catch (IOException | ClassNotFoundException e) {
@@ -112,9 +113,8 @@ public class DadosDiretores {
     }
 
     private void salvarDados() {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
-            outputStream.writeObject(listaDiretores);
-            System.out.println("Dados dos diretores salvos com sucesso.");
+        try {
+            ManipularDadosUtils.salvarDados(arquivoDados, listaDiretores);
         } catch (IOException e) {
             System.err.println("Erro ao salvar os dados dos diretores: " + e.getMessage());
         }

@@ -2,11 +2,11 @@ package database;
 
 import enumerations.StatusMatricula;
 import model.Aluno;
-import model.Curso;
+import utils.ManipularDadosUtils;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,25 +30,17 @@ public class DadosAlunos {
     // MÉTODOS DA CLASSE
     public Aluno adicionarAluno() {
         Aluno novoAluno = null;
-        try {
-            String nomeNovoAluno = receberNome();
-            int idadeNovoAluno = receberIdade();
-            StatusMatricula statusMatriculaNovoAluno = receberStatusMatricula();
+        String nomeNovoAluno = receberNome();
+        int idadeNovoAluno = receberIdade();
+        StatusMatricula statusMatriculaNovoAluno = receberStatusMatricula();
 
-            List<Curso> listaCursosNovoAluno = new ArrayList<>();
+        // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
+        novoAluno = new Aluno(nomeNovoAluno, idadeNovoAluno, statusMatriculaNovoAluno);
+        listaAlunos.add(novoAluno);
 
-            // INSTANCIANDO OBJETO e ADICIONANDO À LISTA
-            novoAluno = new Aluno(nomeNovoAluno, idadeNovoAluno, statusMatriculaNovoAluno);
-            listaAlunos.add(novoAluno);
-
-            // FEEDBACK AO USUÁRIO
-            System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado ao sistema* \n");
-            salvarDados();
-            return novoAluno;
-        } catch (InputMismatchException e) {
-            System.err.println("Erro de entrada. Por favor, insira um número para a idade.");
-            scn.nextLine();
-        }
+        // FEEDBACK AO USUÁRIO
+        System.out.println("*" + nomeNovoAluno.toUpperCase() + " foi adicionado ao sistema* \n");
+        salvarDados();
         return novoAluno;
     }
 
@@ -95,8 +87,8 @@ public class DadosAlunos {
     }
 
     private void carregarDados() {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(arquivoDados))) {
-            listaAlunos = (List<Aluno>) inputStream.readObject();
+        try {
+            ManipularDadosUtils.carregarDados(arquivoDados, listaAlunos);
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo de dados de alunos não encontrado. Será criado um novo arquivo.");
         } catch (IOException | ClassNotFoundException e) {
@@ -105,24 +97,22 @@ public class DadosAlunos {
     }
 
     private void salvarDados() {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(arquivoDados))) {
-            outputStream.writeObject(listaAlunos);
-            System.out.println("Dados dos alunos salvos com sucesso.");
+        try {
+            ManipularDadosUtils.salvarDados(arquivoDados, listaAlunos);
         } catch (IOException e) {
             System.err.println("Erro ao salvar os dados dos alunos: " + e.getMessage());
         }
     }
 
     public void atualizarDados(Aluno alunoAtualizado) {
-        for (int i = 0; i < listaAlunos.size(); i++) {
-            if (listaAlunos.get(i).equals(alunoAtualizado)) {
-                listaAlunos.set(i, alunoAtualizado);
-                salvarDados();
-                return;
-            }
+        try {
+            ManipularDadosUtils.atualizarDados(arquivoDados, listaAlunos, alunoAtualizado);
+        } catch (IOException e) {
+            System.err.println("Erro ao atualizar os dados do aluno: " + alunoAtualizado + " - Causa: " + e.getMessage());
         }
     }
 
+    // Método toString para representar os dados dos alunos como uma String
     @Override
     public String toString() {
         // Inicia a construção de uma string com um StringBuilder
